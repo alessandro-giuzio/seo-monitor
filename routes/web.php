@@ -9,10 +9,13 @@ use App\Http\Controllers\ContentDecayController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RankingSnapshotController;
 use App\Http\Controllers\SeoAuditController;
+use App\Http\Controllers\SeoChangeLogController;
 use App\Http\Controllers\SeoChecklistController;
 use App\Http\Controllers\GscController;
 use App\Http\Controllers\TechnicalSeoController;
 use App\Http\Controllers\AlertController;
+use App\Http\Controllers\RedirectManagerController;
+use App\Http\Controllers\ReleaseQaController;
 use App\Http\Controllers\UptimeCheckController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\BacklinkController;
@@ -73,3 +76,16 @@ Route::get('/reports/export/csv', [ReportController::class, 'exportCsv'])->name(
 Route::get('/checklist', [SeoChecklistController::class, 'index'])->name('checklist.index');
 Route::post('/checklist/generate-tasks', [SeoChecklistController::class, 'generateTasks'])->name('checklist.tasks.generate');
 Route::post('/checklist/tasks/{task}/complete', [SeoChecklistController::class, 'completeTask'])->name('checklist.tasks.complete');
+
+Route::get('/change-log', [SeoChangeLogController::class, 'index'])->name('change-log.index');
+Route::post('/change-log', [SeoChangeLogController::class, 'store'])->name('change-log.store');
+Route::delete('/change-log/{log}', [SeoChangeLogController::class, 'destroy'])->name('change-log.destroy');
+
+Route::get('/redirects', [RedirectManagerController::class, 'index'])->name('redirects.index');
+Route::post('/redirects', [RedirectManagerController::class, 'store'])->name('redirects.store');
+Route::post('/redirects/{rule}/check', [RedirectManagerController::class, 'check'])->name('redirects.check');
+Route::delete('/redirects/{rule}', [RedirectManagerController::class, 'destroy'])->name('redirects.destroy');
+
+Route::get('/release-qa', [ReleaseQaController::class, 'index'])->name('release-qa.index');
+Route::post('/release-qa/run', [ReleaseQaController::class, 'run'])->name('release-qa.run');
+Route::get('/release-qa/{run}', [ReleaseQaController::class, 'show'])->name('release-qa.show');

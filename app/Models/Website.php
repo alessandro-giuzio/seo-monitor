@@ -137,6 +137,30 @@ class Website extends Model
     }
 
     /**
+     * @return HasMany<SeoChangeLog, $this>
+     */
+    public function seoChangeLogs(): HasMany
+    {
+        return $this->hasMany(SeoChangeLog::class)->orderByDesc('changed_at');
+    }
+
+    /**
+     * @return HasMany<RedirectRule, $this>
+     */
+    public function redirectRules(): HasMany
+    {
+        return $this->hasMany(RedirectRule::class)->orderBy('from_path');
+    }
+
+    /**
+     * @return HasMany<ReleaseQaRun, $this>
+     */
+    public function releaseQaRuns(): HasMany
+    {
+        return $this->hasMany(ReleaseQaRun::class)->orderByDesc('checked_at');
+    }
+
+    /**
      * @return HasOne<UptimeCheck, $this>
      */
     public function latestUptimeCheck(): HasOne

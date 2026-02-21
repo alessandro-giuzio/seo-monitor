@@ -9,12 +9,12 @@
 <body class="min-h-screen bg-slate-950 text-slate-100">
 <div class="bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.20),_transparent_45%),radial-gradient(circle_at_80%_20%,_rgba(249,115,22,0.18),_transparent_35%)]">
     <header class="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-            <div>
+        <nav class="mx-auto flex max-w-7xl items-start justify-between gap-8 px-6 py-4 lg:items-center">
+            <div class="shrink-0">
                 <a href="{{ route('dashboard') }}" class="text-lg font-semibold tracking-tight">SEO Toolkit</a>
                 <p class="text-xs text-slate-400">Research + Monitoring</p>
             </div>
-            <div class="flex flex-wrap items-center gap-2 text-sm">
+            <div class="flex flex-1 flex-wrap items-center justify-start gap-2 pt-1 text-sm lg:justify-end lg:pt-0">
                 <a href="{{ route('dashboard') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Dashboard</a>
                 <a href="{{ route('websites.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Websites</a>
                 <a href="{{ route('gsc.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">GSC</a>
@@ -27,6 +27,9 @@
                 <a href="{{ route('links.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Link Ops</a>
                 <a href="{{ route('alerts.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Alerts</a>
                 <a href="{{ route('reports.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Reports</a>
+                <a href="{{ route('change-log.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Change Log</a>
+                <a href="{{ route('redirects.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Redirects</a>
+                <a href="{{ route('release-qa.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Release QA</a>
                 <a href="{{ route('checklist.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Checklist</a>
                 <a href="{{ route('audits.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Audits</a>
             </div>
@@ -51,6 +54,10 @@
                 'links.index' => ['Review suggested internal links.', 'Implement high-score links first.'],
                 'alerts.index' => ['Run alert evaluation and resolve handled alerts.', 'Open alerts show current risks.'],
                 'reports.index' => ['Generate weekly snapshot and export CSV for sharing.', 'Use this for client/team reporting.'],
+                'change-log.index' => ['Track what changed (content, metadata, redirects, technical) and when.', 'Use this to correlate SEO changes with ranking/traffic shifts.'],
+                'redirects.index' => ['Maintain redirect mappings and validate response/location behavior.', 'Use Check action before releases to avoid broken redirect rollouts.'],
+                'release-qa.index' => ['Run pre-release SEO QA against crawl/audit/alerts/redirect health.', 'Use pass/warn/fail score as release gate before go-live.'],
+                'release-qa.show' => ['Inspect one release QA run and all detected issues.', 'Fix high severity items before deploying.'],
                 'checklist.index' => ['Follow the 4-block SEO checklist and resolve warn/fail items.', 'Use Generate tasks to convert issues into actionable work.'],
                 'audits.index' => ['Browse all on-page audits.', 'Open specific audits for issue-level detail.'],
                 'audits.show' => ['Review metadata and technical findings for one URL.', 'Use issues list as optimization checklist for the page.'],
