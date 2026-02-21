@@ -1,59 +1,174 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SEO Toolkit (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A local-first SEO operations app built with Laravel.
 
-## About Laravel
+This project combines research, monitoring, technical checks, and reporting in one dashboard, with modules inspired by day-to-day agency workflows.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Core Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Website management and per-site settings
+- Rank tracking (keywords + ranking snapshots)
+- On-page SEO audits (live fetch or pasted HTML)
+- Domain trend logging (traffic/visibility snapshots)
+- Competitor tracking and keyword gap analysis
+- Backlink analytics and toxicity flags
+- Google Search Console (GSC) manual import
+- Technical crawl monitor:
+  - robots.txt and sitemap checks
+  - indexability checks
+  - orphan page detection
+  - URL depth tracking
+  - hreflang/charset/AMP signals
+- Content decay detector (28d vs previous 28d)
+- Internal link opportunity generator
+- Alerts engine (indexation + traffic drop signals)
+- SEO checklist page with pass/warn/fail by section
+- Task generation from checklist warn/fail items
+- CSV reporting export
+- Right-side “How to use this page” guidance panel on all pages
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tech Stack
 
-## Learning Laravel
+- Laravel 12
+- PHP 8.2+
+- Blade + Tailwind CSS (via Vite)
+- SQLite (local default)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Project Structure (high level)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- `app/Http/Controllers` -> feature controllers
+- `app/Services` -> crawler, alert, checklist logic
+- `app/Models` -> Eloquent models
+- `database/migrations` -> schema
+- `resources/views` -> Blade pages
+- `routes/web.php` -> web routes
+- `routes/console.php` -> scheduled tasks
 
-## Laravel Sponsors
+## Local Setup
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Install dependencies
 
-### Premium Partners
+```bash
+composer install
+npm install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. Environment setup
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Use SQLite (default in this repo)
 
-## Code of Conduct
+```bash
+touch database/database.sqlite
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Ensure `.env` contains:
 
-## Security Vulnerabilities
+```env
+DB_CONNECTION=sqlite
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. Run migrations
+
+```bash
+php artisan migrate
+```
+
+5. Start app
+
+```bash
+php artisan serve
+npm run dev
+```
+
+Open your local URL (for example `http://127.0.0.1:8000` or your Herd domain).
+
+## Main Pages
+
+- `/` Dashboard
+- `/websites` Websites
+- `/gsc` GSC import
+- `/domain-overview` Domain metrics
+- `/keyword-research` Keyword ideas
+- `/competitors` Competitor gap
+- `/backlinks` Backlink analytics
+- `/technical` Technical crawl monitor
+- `/content-decay` Content decay
+- `/link-opportunities` Internal link opportunities
+- `/alerts` Alerts
+- `/reports` Reports
+- `/checklist` SEO checklist + task generation
+- `/audits` On-page audits
+
+## Daily Workflow (recommended)
+
+1. Add website on Dashboard
+2. Add tracked keywords and ranking snapshots
+3. Run technical crawl (`/technical`)
+4. Run on-page audits (`/audits`)
+5. Import GSC data (`/gsc`)
+6. Review decay (`/content-decay`) and alerts (`/alerts`)
+7. Open checklist (`/checklist`) and generate tasks
+8. Export weekly report (`/reports`)
+
+## GSC Import Formats
+
+The importer supports both:
+
+1. Detailed rows:
+
+```text
+date,query,page_url,clicks,impressions,ctr,avg_position
+```
+
+2. Search Console Chart export rows:
+
+```text
+Date,Clicks,Impressions,CTR,Position
+```
+
+Notes:
+- `ctr` accepts decimal (`0.0442`) or percent text (`4.42%`)
+- `date` should be `YYYY-MM-DD`
+
+## Scheduler and Automation
+
+Scheduled tasks are defined in `routes/console.php`:
+
+- `seo:run-scheduled` (hourly)
+- `seo:evaluate-alerts` (hourly)
+
+They run automatically only if Laravel scheduler is running on your machine/server.
+
+For production cron:
+
+```cron
+* * * * * php /path/to/project/artisan schedule:run >> /dev/null 2>&1
+```
+
+Manual execution:
+
+```bash
+php artisan seo:run-scheduled
+php artisan seo:evaluate-alerts
+```
+
+## Testing
+
+```bash
+php artisan test
+```
+
+## Deployment Notes
+
+- App works fully local without deployment.
+- For production, use MySQL/PostgreSQL instead of SQLite.
+- Run migrations with `--force` in production.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
