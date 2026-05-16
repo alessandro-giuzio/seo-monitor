@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+echo "Discovering packages..."
+php /var/www/html/artisan package:discover --ansi
+
 echo "Running migrations..."
 php /var/www/html/artisan migrate --force
 
