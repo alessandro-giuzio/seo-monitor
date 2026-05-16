@@ -22,6 +22,8 @@ use App\Http\Controllers\BacklinkController;
 use App\Http\Controllers\CompetitorController;
 use Illuminate\Support\Facades\Route;
 
+Route::middleware('auth')->group(function () {
+
 Route::get('/', DashboardController::class)->name('dashboard');
 
 Route::get('/websites', [WebsiteController::class, 'index'])->name('websites.index');
@@ -89,3 +91,5 @@ Route::delete('/redirects/{rule}', [RedirectManagerController::class, 'destroy']
 Route::get('/release-qa', [ReleaseQaController::class, 'index'])->name('release-qa.index');
 Route::post('/release-qa/run', [ReleaseQaController::class, 'run'])->name('release-qa.run');
 Route::get('/release-qa/{run}', [ReleaseQaController::class, 'show'])->name('release-qa.show');
+
+}); // end auth middleware group
