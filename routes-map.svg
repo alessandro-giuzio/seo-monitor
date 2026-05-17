@@ -1,0 +1,437 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1600" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12">
+
+  <!-- Background -->
+  <rect width="1100" height="1600" fill="#0f172a"/>
+
+  <!-- Title -->
+  <text x="550" y="40" text-anchor="middle" fill="#f8fafc" font-size="20" font-weight="bold">SEO Demo — Route Map</text>
+  <text x="550" y="62" text-anchor="middle" fill="#94a3b8" font-size="12">All routes require authentication (auth middleware)</text>
+
+  <!-- Legend -->
+  <rect x="30" y="80" width="12" height="12" rx="2" fill="#22c55e"/>
+  <text x="48" y="91" fill="#94a3b8" font-size="11">GET</text>
+  <rect x="90" y="80" width="12" height="12" rx="2" fill="#3b82f6"/>
+  <text x="108" y="91" fill="#94a3b8" font-size="11">POST</text>
+  <rect x="150" y="80" width="12" height="12" rx="2" fill="#f59e0b"/>
+  <text x="168" y="91" fill="#94a3b8" font-size="11">PUT/PATCH</text>
+  <rect x="250" y="80" width="12" height="12" rx="2" fill="#ef4444"/>
+  <text x="268" y="91" fill="#94a3b8" font-size="11">DELETE</text>
+
+  <!-- Auth (public) -->
+  <rect x="30" y="108" width="1040" height="76" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="126" fill="#cbd5e1" font-size="11" font-weight="bold">AUTH (guest/public)</text>
+  <!-- row 1 -->
+  <rect x="42" y="133" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="144" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="144" fill="#f8fafc" font-size="11">/login</text>
+  <text x="200" y="144" fill="#64748b" font-size="11">Show login form</text>
+
+  <rect x="380" y="133" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="396" y="144" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="420" y="144" fill="#f8fafc" font-size="11">/login</text>
+  <text x="530" y="144" fill="#64748b" font-size="11">Authenticate user</text>
+
+  <rect x="42" y="152" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="163" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="163" fill="#f8fafc" font-size="11">/forgot-password</text>
+  <text x="200" y="163" fill="#64748b" font-size="11">Show forgot-password form</text>
+
+  <rect x="380" y="152" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="396" y="163" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="420" y="163" fill="#f8fafc" font-size="11">/forgot-password</text>
+  <text x="600" y="163" fill="#64748b" font-size="11">Send reset email</text>
+
+  <rect x="42" y="171" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="182" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="182" fill="#f8fafc" font-size="11">/reset-password/{token}</text>
+  <text x="280" y="182" fill="#64748b" font-size="11">Show reset form</text>
+
+  <rect x="380" y="171" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="396" y="182" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="420" y="182" fill="#f8fafc" font-size="11">/reset-password</text>
+  <text x="580" y="182" fill="#64748b" font-size="11">Set new password</text>
+
+  <!-- Logout -->
+  <rect x="850" y="133" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="866" y="144" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="890" y="144" fill="#f8fafc" font-size="11">/logout</text>
+  <text x="960" y="144" fill="#64748b" font-size="11">End session</text>
+
+  <!-- Dashboard -->
+  <rect x="30" y="196" width="1040" height="30" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="210" fill="#cbd5e1" font-size="11" font-weight="bold">DASHBOARD</text>
+  <rect x="140" y="199" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="154" y="210" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="176" y="210" fill="#f8fafc" font-size="11">/</text>
+  <text x="220" y="210" fill="#64748b" font-size="11">Dashboard overview — stats, recent audits, uptime</text>
+
+  <!-- Profile -->
+  <rect x="30" y="238" width="1040" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="254" fill="#cbd5e1" font-size="11" font-weight="bold">PROFILE</text>
+  <rect x="42" y="259" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="270" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="270" fill="#f8fafc" font-size="11">/profile</text>
+  <text x="200" y="270" fill="#64748b" font-size="11">Edit profile form</text>
+  <rect x="380" y="259" width="44" height="14" rx="2" fill="#f59e0b"/>
+  <text x="402" y="270" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">PATCH</text>
+  <text x="432" y="270" fill="#f8fafc" font-size="11">/profile</text>
+  <text x="540" y="270" fill="#64748b" font-size="11">Update name/email/password</text>
+  <rect x="750" y="259" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="772" y="270" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="802" y="270" fill="#f8fafc" font-size="11">/profile</text>
+  <text x="890" y="270" fill="#64748b" font-size="11">Delete account</text>
+
+  <!-- Websites -->
+  <rect x="30" y="300" width="1040" height="90" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="316" fill="#cbd5e1" font-size="11" font-weight="bold">WEBSITES  <tspan fill="#64748b" font-weight="normal">— the core entity everything else belongs to</tspan></text>
+  <rect x="42" y="321" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="332" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="332" fill="#f8fafc" font-size="11">/websites</text>
+  <text x="220" y="332" fill="#64748b" font-size="11">List all tracked websites</text>
+  <rect x="380" y="321" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="396" y="332" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="420" y="332" fill="#f8fafc" font-size="11">/websites</text>
+  <text x="540" y="332" fill="#64748b" font-size="11">Add a new website</text>
+
+  <rect x="42" y="340" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="351" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="351" fill="#f8fafc" font-size="11">/websites/{website}</text>
+  <text x="280" y="351" fill="#64748b" font-size="11">Website detail page</text>
+  <rect x="380" y="340" width="28" height="14" rx="2" fill="#f59e0b"/>
+  <text x="394" y="351" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">PUT</text>
+  <text x="416" y="351" fill="#f8fafc" font-size="11">/websites/{website}</text>
+  <text x="580" y="351" fill="#64748b" font-size="11">Update website details</text>
+  <rect x="750" y="340" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="772" y="351" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="802" y="351" fill="#f8fafc" font-size="11">/websites/{website}</text>
+  <text x="940" y="351" fill="#64748b" font-size="11">Delete website</text>
+
+  <rect x="42" y="359" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="370" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="370" fill="#f8fafc" font-size="11">/websites/{website}/keywords</text>
+  <text x="380" y="370" fill="#64748b" font-size="11">Add keyword to website</text>
+  <rect x="600" y="359" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="616" y="370" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="640" y="370" fill="#f8fafc" font-size="11">/websites/{website}/uptime-checks</text>
+  <text x="920" y="370" fill="#64748b" font-size="11">Run uptime check</text>
+
+  <rect x="42" y="378" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="389" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="389" fill="#f8fafc" font-size="11">/websites/{website}/domain-overview</text>
+  <text x="420" y="389" fill="#64748b" font-size="11">Store domain overview snapshot</text>
+  <rect x="650" y="378" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="666" y="389" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="690" y="389" fill="#f8fafc" font-size="11">/websites/{website}/competitors</text>
+  <text x="920" y="389" fill="#64748b" font-size="11">Add competitor</text>
+
+  <!-- Keywords -->
+  <rect x="30" y="402" width="500" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="418" fill="#cbd5e1" font-size="11" font-weight="bold">KEYWORDS</text>
+  <rect x="42" y="423" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="64" y="434" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="94" y="434" fill="#f8fafc" font-size="11">/keywords/{keyword}</text>
+  <text x="280" y="434" fill="#64748b" font-size="11">Remove keyword</text>
+  <rect x="42" y="440" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="451" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="451" fill="#f8fafc" font-size="11">/keywords/{keyword}/ranking-snapshots</text>
+  <text x="380" y="451" fill="#64748b" font-size="11">Record position</text>
+
+  <!-- Domain Overview -->
+  <rect x="545" y="402" width="525" height="30" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="418" fill="#cbd5e1" font-size="11" font-weight="bold">DOMAIN OVERVIEW</text>
+  <rect x="700" y="405" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="714" y="416" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="736" y="416" fill="#f8fafc" font-size="11">/domain-overview</text>
+  <text x="880" y="416" fill="#64748b" font-size="11">DA/PA history</text>
+
+  <!-- SEO Audits -->
+  <rect x="30" y="464" width="500" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="480" fill="#cbd5e1" font-size="11" font-weight="bold">SEO AUDITS  <tspan fill="#64748b" font-weight="normal">— crawl &amp; score a website</tspan></text>
+  <rect x="42" y="485" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="496" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="496" fill="#f8fafc" font-size="11">/audits</text>
+  <text x="180" y="496" fill="#64748b" font-size="11">All audit runs</text>
+  <rect x="280" y="485" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="296" y="496" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="320" y="496" fill="#f8fafc" font-size="11">/audits</text>
+  <text x="400" y="496" fill="#64748b" font-size="11">Trigger new audit</text>
+  <rect x="42" y="503" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="514" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="514" fill="#f8fafc" font-size="11">/audits/{audit}</text>
+  <text x="240" y="514" fill="#64748b" font-size="11">Audit detail with issues</text>
+
+  <!-- Keyword Research -->
+  <rect x="545" y="464" width="525" height="68" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="480" fill="#cbd5e1" font-size="11" font-weight="bold">KEYWORD RESEARCH  <tspan fill="#64748b" font-weight="normal">— discover &amp; track ideas</tspan></text>
+  <rect x="557" y="485" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="496" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="496" fill="#f8fafc" font-size="11">/keyword-research</text>
+  <text x="750" y="496" fill="#64748b" font-size="11">Keyword ideas list</text>
+  <rect x="557" y="503" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="514" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="514" fill="#f8fafc" font-size="11">/keyword-research</text>
+  <text x="760" y="514" fill="#64748b" font-size="11">Add single idea</text>
+  <rect x="557" y="522" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="533" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="533" fill="#f8fafc" font-size="11">/keyword-research/bulk</text>
+  <text x="790" y="533" fill="#64748b" font-size="11">Bulk import ideas</text>
+  <rect x="557" y="540" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="551" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="551" fill="#f8fafc" font-size="11">/keyword-research/{idea}/track</text>
+  <text x="870" y="551" fill="#64748b" font-size="11">Promote to tracked</text>
+
+  <!-- Backlinks -->
+  <rect x="30" y="544" width="500" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="560" fill="#cbd5e1" font-size="11" font-weight="bold">BACKLINKS</text>
+  <rect x="42" y="565" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="576" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="576" fill="#f8fafc" font-size="11">/backlinks</text>
+  <text x="200" y="576" fill="#64748b" font-size="11">All tracked backlinks</text>
+  <rect x="340" y="565" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="356" y="576" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="380" y="576" fill="#f8fafc" font-size="11">/backlinks</text>
+  <text x="470" y="576" fill="#64748b" font-size="11">Add backlink</text>
+  <rect x="42" y="583" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="64" y="594" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="94" y="594" fill="#f8fafc" font-size="11">/backlinks/{backlink}</text>
+  <text x="300" y="594" fill="#64748b" font-size="11">Remove backlink</text>
+
+  <!-- Competitors -->
+  <rect x="545" y="544" width="525" height="68" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="560" fill="#cbd5e1" font-size="11" font-weight="bold">COMPETITORS</text>
+  <rect x="557" y="565" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="576" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="576" fill="#f8fafc" font-size="11">/competitors</text>
+  <text x="720" y="576" fill="#64748b" font-size="11">All competitors</text>
+  <rect x="557" y="583" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="594" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="594" fill="#f8fafc" font-size="11">/competitors/{competitor}/snapshots</text>
+  <text x="890" y="594" fill="#64748b" font-size="11">Snapshot</text>
+  <rect x="557" y="601" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="579" y="612" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="609" y="612" fill="#f8fafc" font-size="11">/competitors/{competitor}</text>
+  <text x="830" y="612" fill="#64748b" font-size="11">Remove competitor</text>
+
+  <!-- GSC -->
+  <rect x="30" y="606" width="500" height="34" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="622" fill="#cbd5e1" font-size="11" font-weight="bold">GOOGLE SEARCH CONSOLE</text>
+  <rect x="42" y="627" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="638" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="638" fill="#f8fafc" font-size="11">/gsc</text>
+  <text x="160" y="638" fill="#64748b" font-size="11">GSC metrics dashboard</text>
+  <rect x="280" y="627" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="296" y="638" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="320" y="638" fill="#f8fafc" font-size="11">/gsc/import</text>
+  <text x="430" y="638" fill="#64748b" font-size="11">Import GSC CSV</text>
+
+  <!-- Technical SEO -->
+  <rect x="545" y="624" width="525" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="640" fill="#cbd5e1" font-size="11" font-weight="bold">TECHNICAL SEO  <tspan fill="#64748b" font-weight="normal">— crawl for issues</tspan></text>
+  <rect x="557" y="645" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="656" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="656" fill="#f8fafc" font-size="11">/technical</text>
+  <text x="710" y="656" fill="#64748b" font-size="11">Technical runs list</text>
+  <rect x="557" y="663" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="674" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="674" fill="#f8fafc" font-size="11">/technical/run</text>
+  <text x="720" y="674" fill="#64748b" font-size="11">Start crawl run</text>
+  <rect x="850" y="663" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="864" y="674" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="886" y="674" fill="#f8fafc" font-size="11">/technical/runs/{run}</text>
+
+  <!-- Alerts -->
+  <rect x="30" y="652" width="500" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="668" fill="#cbd5e1" font-size="11" font-weight="bold">ALERTS</text>
+  <rect x="42" y="673" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="684" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="684" fill="#f8fafc" font-size="11">/alerts</text>
+  <text x="180" y="684" fill="#64748b" font-size="11">Open alerts</text>
+  <rect x="280" y="673" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="296" y="684" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="320" y="684" fill="#f8fafc" font-size="11">/alerts/evaluate</text>
+  <text x="460" y="684" fill="#64748b" font-size="11">Re-check rules</text>
+  <rect x="42" y="691" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="702" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="702" fill="#f8fafc" font-size="11">/alerts/{alert}/resolve</text>
+  <text x="300" y="702" fill="#64748b" font-size="11">Mark alert resolved</text>
+
+  <!-- Content Decay + Link Opps -->
+  <rect x="30" y="714" width="500" height="34" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="730" fill="#cbd5e1" font-size="11" font-weight="bold">CONTENT &amp; LINKS</text>
+  <rect x="42" y="735" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="746" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="746" fill="#f8fafc" font-size="11">/content-decay</text>
+  <text x="240" y="746" fill="#64748b" font-size="11">Pages losing traffic</text>
+  <rect x="360" y="735" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="374" y="746" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="396" y="746" fill="#f8fafc" font-size="11">/link-opportunities</text>
+  <text x="540" y="746" fill="#64748b" font-size="11">Internal link suggestions</text>
+
+  <!-- Reports -->
+  <rect x="545" y="686" width="525" height="34" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="702" fill="#cbd5e1" font-size="11" font-weight="bold">REPORTS</text>
+  <rect x="557" y="707" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="718" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="718" fill="#f8fafc" font-size="11">/reports</text>
+  <text x="700" y="718" fill="#64748b" font-size="11">Report dashboard</text>
+  <rect x="830" y="707" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="844" y="718" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="866" y="718" fill="#f8fafc" font-size="11">/reports/export/csv</text>
+  <text x="1010" y="718" fill="#64748b" font-size="11">CSV</text>
+
+  <!-- Checklist -->
+  <rect x="30" y="760" width="500" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="776" fill="#cbd5e1" font-size="11" font-weight="bold">SEO CHECKLIST</text>
+  <rect x="42" y="781" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="792" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="792" fill="#f8fafc" font-size="11">/checklist</text>
+  <text x="200" y="792" fill="#64748b" font-size="11">Task list</text>
+  <rect x="280" y="781" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="296" y="792" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="320" y="792" fill="#f8fafc" font-size="11">/checklist/generate-tasks</text>
+  <text x="520" y="792" fill="#64748b" font-size="11">AI generate tasks</text>
+  <rect x="42" y="799" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="810" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="810" fill="#f8fafc" font-size="11">/checklist/tasks/{task}/complete</text>
+  <text x="400" y="810" fill="#64748b" font-size="11">Mark task done</text>
+
+  <!-- Change Log -->
+  <rect x="545" y="732" width="525" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="748" fill="#cbd5e1" font-size="11" font-weight="bold">SEO CHANGE LOG</text>
+  <rect x="557" y="753" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="764" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="764" fill="#f8fafc" font-size="11">/change-log</text>
+  <text x="720" y="764" fill="#64748b" font-size="11">All change entries</text>
+  <rect x="557" y="771" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="782" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="782" fill="#f8fafc" font-size="11">/change-log</text>
+  <text x="710" y="782" fill="#64748b" font-size="11">Log a change</text>
+  <rect x="830" y="771" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="852" y="782" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="882" y="782" fill="#f8fafc" font-size="11">/change-log/{log}</text>
+  <text x="1000" y="782" fill="#64748b" font-size="11">Delete</text>
+
+  <!-- Redirects -->
+  <rect x="30" y="822" width="500" height="68" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="838" fill="#cbd5e1" font-size="11" font-weight="bold">REDIRECT MANAGER</text>
+  <rect x="42" y="843" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="56" y="854" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="78" y="854" fill="#f8fafc" font-size="11">/redirects</text>
+  <text x="200" y="854" fill="#64748b" font-size="11">All redirect rules</text>
+  <rect x="280" y="843" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="296" y="854" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="320" y="854" fill="#f8fafc" font-size="11">/redirects</text>
+  <text x="420" y="854" fill="#64748b" font-size="11">Add rule</text>
+  <rect x="42" y="861" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="58" y="872" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="82" y="872" fill="#f8fafc" font-size="11">/redirects/{rule}/check</text>
+  <text x="300" y="872" fill="#64748b" font-size="11">Test if redirect fires</text>
+  <rect x="42" y="879" width="44" height="14" rx="2" fill="#ef4444"/>
+  <text x="64" y="890" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DEL</text>
+  <text x="94" y="890" fill="#f8fafc" font-size="11">/redirects/{rule}</text>
+  <text x="260" y="890" fill="#64748b" font-size="11">Delete rule</text>
+
+  <!-- Release QA -->
+  <rect x="545" y="794" width="525" height="50" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="557" y="810" fill="#cbd5e1" font-size="11" font-weight="bold">RELEASE QA  <tspan fill="#64748b" font-weight="normal">— pre-deploy checks</tspan></text>
+  <rect x="557" y="815" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="571" y="826" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="593" y="826" fill="#f8fafc" font-size="11">/release-qa</text>
+  <text x="720" y="826" fill="#64748b" font-size="11">QA runs list</text>
+  <rect x="557" y="833" width="32" height="14" rx="2" fill="#3b82f6"/>
+  <text x="573" y="844" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">POST</text>
+  <text x="597" y="844" fill="#f8fafc" font-size="11">/release-qa/run</text>
+  <text x="730" y="844" fill="#64748b" font-size="11">Start QA run</text>
+  <rect x="860" y="833" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="874" y="844" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="896" y="844" fill="#f8fafc" font-size="11">/release-qa/{run}</text>
+
+  <!-- Health -->
+  <rect x="30" y="902" width="1040" height="30" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="42" y="918" fill="#cbd5e1" font-size="11" font-weight="bold">SYSTEM</text>
+  <rect x="110" y="905" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="124" y="916" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="146" y="916" fill="#f8fafc" font-size="11">/up</text>
+  <text x="200" y="916" fill="#64748b" font-size="11">Health check endpoint (used by Coolify)</text>
+  <rect x="500" y="905" width="28" height="14" rx="2" fill="#22c55e"/>
+  <text x="514" y="916" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">GET</text>
+  <text x="536" y="916" fill="#f8fafc" font-size="11">/up</text>
+  <text x="580" y="916" fill="#64748b" font-size="11">→ returns {"status":"ok"} when app is healthy</text>
+
+  <!-- Data flow diagram -->
+  <text x="550" y="968" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="bold">Data Flow</text>
+
+  <!-- Central Website box -->
+  <rect x="430" y="980" width="240" height="36" rx="6" fill="#6366f1" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="550" y="1003" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Website</text>
+
+  <!-- Children boxes -->
+  <!-- Keywords -->
+  <rect x="30" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="100" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">Keywords</text>
+  <!-- Ranking Snapshots under Keywords -->
+  <rect x="30" y="1120" width="140" height="26" rx="4" fill="#0f172a" stroke="#1e293b"/>
+  <text x="100" y="1137" text-anchor="middle" fill="#94a3b8" font-size="10">Ranking Snapshots</text>
+  <line x1="100" y1="1102" x2="100" y2="1120" stroke="#334155" stroke-width="1"/>
+
+  <!-- SEO Audits -->
+  <rect x="200" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="270" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">SEO Audits</text>
+
+  <!-- Uptime Checks -->
+  <rect x="370" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="440" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">Uptime Checks</text>
+
+  <!-- Domain Metrics -->
+  <rect x="540" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="610" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">Domain Metrics</text>
+
+  <!-- Competitors -->
+  <rect x="710" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="780" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">Competitors</text>
+  <rect x="710" y="1120" width="140" height="26" rx="4" fill="#0f172a" stroke="#1e293b"/>
+  <text x="780" y="1137" text-anchor="middle" fill="#94a3b8" font-size="10">Competitor Snapshots</text>
+  <line x1="780" y1="1102" x2="780" y2="1120" stroke="#334155" stroke-width="1"/>
+
+  <!-- Crawl Runs -->
+  <rect x="880" y="1072" width="140" height="30" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="950" y="1092" text-anchor="middle" fill="#f8fafc" font-size="11">Crawl Runs</text>
+  <rect x="880" y="1120" width="140" height="26" rx="4" fill="#0f172a" stroke="#1e293b"/>
+  <text x="950" y="1137" text-anchor="middle" fill="#94a3b8" font-size="10">Crawl Pages</text>
+  <line x1="950" y1="1102" x2="950" y2="1120" stroke="#334155" stroke-width="1"/>
+
+  <!-- Lines from Website to children -->
+  <line x1="550" y1="1016" x2="550" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="100" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="270" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="440" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="610" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="780" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="550" y1="1050" x2="950" y2="1050" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="100" y1="1050" x2="100" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="270" y1="1050" x2="270" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="440" y1="1050" x2="440" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="610" y1="1050" x2="610" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="780" y1="1050" x2="780" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+  <line x1="950" y1="1050" x2="950" y2="1072" stroke="#6366f1" stroke-width="1.5"/>
+
+  <!-- Standalone modules row -->
+  <text x="550" y="1185" text-anchor="middle" fill="#94a3b8" font-size="11">Standalone modules (not tied to a specific website record)</text>
+  <rect x="30" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="95" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">Backlinks</text>
+  <rect x="175" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="240" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">Keyword Ideas</text>
+  <rect x="320" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="385" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">GSC Metrics</text>
+  <rect x="465" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="530" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">SEO Alerts</text>
+  <rect x="610" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="675" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">Change Log</text>
+  <rect x="755" y="1200" width="130" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="820" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">Redirect Rules</text>
+  <rect x="900" y="1200" width="170" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="985" y="1217" text-anchor="middle" fill="#f8fafc" font-size="10">Release QA Runs</text>
+
+  <!-- Footer -->
+  <text x="550" y="1270" text-anchor="middle" fill="#334155" font-size="10">Total: 37 routes across 16 modules — all behind auth middleware</text>
+</svg>
