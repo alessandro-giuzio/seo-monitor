@@ -32,6 +32,24 @@
                 <a href="{{ route('release-qa.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Release QA</a>
                 <a href="{{ route('checklist.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Checklist</a>
                 <a href="{{ route('audits.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Audits</a>
+
+                {{-- User menu --}}
+                <div x-data="{ open: false }" class="relative ml-2">
+                    <button @click="open = !open" class="flex items-center gap-1.5 rounded-md border border-slate-700 px-3 py-1.5 text-sm hover:border-sky-400 hover:text-sky-300">
+                        {{ Auth::user()->name }}
+                        <svg class="h-3 w-3 opacity-60" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div x-show="open" @click.outside="open = false" x-transition
+                         class="absolute right-0 top-full z-50 mt-1 w-40 rounded-lg border border-slate-700 bg-slate-900 py-1 shadow-lg">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm hover:bg-slate-800">Profile</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-slate-800">
+                                Log out
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
