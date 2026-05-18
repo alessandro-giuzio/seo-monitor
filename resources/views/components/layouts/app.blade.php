@@ -8,7 +8,7 @@
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100">
 <div class="bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.20),_transparent_45%),radial-gradient(circle_at_80%_20%,_rgba(249,115,22,0.18),_transparent_35%)]">
-    <header class="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur">
+    <header class="relative z-50 border-b border-slate-800/70 bg-slate-950/80 backdrop-blur">
         <nav class="mx-auto flex max-w-7xl items-start justify-between gap-8 px-6 py-4 lg:items-center">
             <div class="shrink-0">
                 <a href="{{ route('dashboard') }}" class="text-lg font-semibold tracking-tight">SEO Toolkit</a>
