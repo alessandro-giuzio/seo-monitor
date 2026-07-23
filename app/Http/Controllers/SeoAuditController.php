@@ -20,7 +20,9 @@ class SeoAuditController extends Controller
             ->latest('audited_at')
             ->paginate(25);
 
-        return view('audits.index', ['audits' => $audits]);
+        $websites = Website::query()->orderBy('name')->get(['id', 'name']);
+
+        return view('audits.index', ['audits' => $audits, 'websites' => $websites]);
     }
 
     public function show(SeoAudit $audit): View

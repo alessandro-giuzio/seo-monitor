@@ -11,8 +11,13 @@
     <header class="relative z-50 border-b border-slate-800/70 bg-slate-950/80 backdrop-blur">
         <nav class="mx-auto flex max-w-7xl items-start justify-between gap-8 px-6 py-4 lg:items-center">
             <div class="shrink-0">
-                <a href="{{ route('dashboard') }}" class="text-lg font-semibold tracking-tight">SEO Toolkit</a>
-                <p class="text-xs text-slate-400">Research + Monitoring</p>
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5">
+                    <x-application-logo class="h-9 w-9" />
+                    <div>
+                        <span class="block text-base font-semibold tracking-tight text-slate-100">SEO Toolkit</span>
+                        <span class="block text-xs text-slate-400">Research + Monitoring</span>
+                    </div>
+                </a>
             </div>
             <div class="flex flex-1 flex-wrap items-center justify-start gap-2 pt-1 text-sm lg:justify-end lg:pt-0">
                 <a href="{{ route('dashboard') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Dashboard</a>
