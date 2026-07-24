@@ -38,6 +38,7 @@ Route::put('/websites/{website}', [WebsiteController::class, 'update'])->name('w
 Route::delete('/websites/{website}', [WebsiteController::class, 'destroy'])->name('websites.destroy');
 
 Route::post('/websites/{website}/keywords', [KeywordController::class, 'store'])->name('keywords.store');
+Route::put('/keywords/{keyword}', [KeywordController::class, 'update'])->name('keywords.update');
 Route::delete('/keywords/{keyword}', [KeywordController::class, 'destroy'])->name('keywords.destroy');
 
 Route::post('/keywords/{keyword}/ranking-snapshots', [RankingSnapshotController::class, 'store'])->name('rankings.store');

@@ -39,11 +39,14 @@ There's a prioritized backlog in `NEXT_STEPS.md` (written 2026-05-18) with 7 ite
 - Delete submits a `DELETE` form to `route('websites.destroy', $website)` with a `confirm()` guard, matching the pattern used on backlinks/competitors delete buttons.
 - Verified end-to-end via curl: edited a website's name/URL and confirmed the change persisted, then created and deleted a scratch website to confirm the delete path works. No stray test data left behind.
 
-## Not started — remaining backlog from NEXT_STEPS.md, in priority order
+### 7. Keyword inline edit — ✅ done
+- Found while starting this item: `resources/views/websites/show.blade.php` actually had **no** add-keyword form and **no** delete button at all, despite `KeywordController@store`/`destroy` already existing — NEXT_STEPS.md's description ("only delete, no edit") was stale, same as item #4. So this ended up being add + edit + delete, not just edit.
+- Added `KeywordController@update` (`app/Http/Controllers/KeywordController.php`) with the same validation rules as `store`, and registered `PUT /keywords/{keyword}` as `keywords.update` in `routes/web.php`.
+- `resources/views/websites/show.blade.php`: added a collapsible "+ Add keyword" form (term, target_url, search_engine, location, device, priority) above the table. Each row now has its own `x-data="{ editing }"` scope with Edit/Delete buttons; Edit swaps the row for an inline form (term, search_engine, device, priority editable; target_url/location carried through as hidden fields since they weren't shown in the table) submitting `PUT` to `keywords.update`; Delete submits `DELETE` to `keywords.destroy` with a `confirm()` guard.
+- Verified end-to-end via curl: created a scratch keyword, edited its term/engine/device/priority and confirmed the DB row updated, then deleted it and confirmed removal. No stray test data left behind.
 
-### 7. Keyword inline edit — LOW
-- File: `resources/views/websites/show.blade.php`.
-- Add inline edit toggle on keyword rows (currently delete-only).
+## Backlog complete
+All 7 items from `NEXT_STEPS.md` are done. Nothing outstanding from that list — future work would need a fresh pass to identify next priorities (or re-check NEXT_STEPS.md itself, since it turned out stale on items #4 and #7).
 
 ## Verification checklist for next session
 - `npm run dev` running, Herd serving `http://seo-demo.test`.

@@ -25,6 +25,22 @@ class KeywordController extends Controller
         return back()->with('status', 'Keyword added.');
     }
 
+    public function update(Request $request, Keyword $keyword): RedirectResponse
+    {
+        $validated = $request->validate([
+            'term' => ['required', 'string', 'max:255'],
+            'target_url' => ['nullable', 'url', 'max:255'],
+            'search_engine' => ['required', 'string', 'max:255'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'device' => ['required', 'in:desktop,mobile'],
+            'priority' => ['required', 'integer', 'min:1', 'max:3'],
+        ]);
+
+        $keyword->update($validated);
+
+        return back()->with('status', 'Keyword updated.');
+    }
+
     public function destroy(Keyword $keyword): RedirectResponse
     {
         $keyword->delete();

@@ -68,8 +68,40 @@
     </section>
 
     <section class="mt-6 grid gap-6 lg:grid-cols-3">
-        <article class="rounded-xl border border-slate-800 bg-slate-900/70 p-5 lg:col-span-2">
-            <h2 class="text-lg font-semibold">Keywords</h2>
+        <article class="rounded-xl border border-slate-800 bg-slate-900/70 p-5 lg:col-span-2" x-data="{ adding: false }">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Keywords</h2>
+                <button type="button" @click="adding = !adding"
+                        class="rounded-md border border-slate-700 px-3 py-1.5 text-xs hover:border-sky-400 hover:text-sky-300">
+                    <span x-text="adding ? '✕ Cancel' : '+ Add keyword'"></span>
+                </button>
+            </div>
+
+            <form x-show="adding" x-transition action="{{ route('keywords.store', $website) }}" method="post"
+                  class="mt-4 grid gap-2 rounded-lg border border-slate-800 bg-slate-950/50 p-3 sm:grid-cols-2 lg:grid-cols-3">
+                @csrf
+                <input name="term" placeholder="Keyword" required
+                       class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                <input name="target_url" placeholder="Target URL (optional)"
+                       class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                <input name="search_engine" value="Google" placeholder="Search engine" required
+                       class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                <input name="location" placeholder="Location (optional)"
+                       class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                <select name="device" class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                    <option value="desktop">Desktop</option>
+                    <option value="mobile">Mobile</option>
+                </select>
+                <select name="priority" class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                    <option value="1">Priority 1</option>
+                    <option value="2" selected>Priority 2</option>
+                    <option value="3">Priority 3</option>
+                </select>
+                <button type="submit" class="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-sky-500 sm:col-span-2 lg:col-span-3">
+                    Save keyword
+                </button>
+            </form>
+
             <div class="mt-4 overflow-x-auto">
                 <table class="min-w-full text-sm">
                     <thead>
@@ -78,19 +110,57 @@
                         <th class="px-2 py-2">Engine</th>
                         <th class="px-2 py-2">Device</th>
                         <th class="px-2 py-2">Latest Position</th>
+                        <th class="px-2 py-2"></th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($website->keywords as $keyword)
-                        <tr class="border-b border-slate-900/70">
-                            <td class="px-2 py-2">{{ $keyword->term }}</td>
-                            <td class="px-2 py-2">{{ $keyword->search_engine }}</td>
-                            <td class="px-2 py-2 capitalize">{{ $keyword->device }}</td>
-                            <td class="px-2 py-2">{{ $keyword->latestSnapshot?->position ?? '-' }}</td>
+                        <tr class="border-b border-slate-900/70" x-data="{ editing: false }">
+                            <td colspan="5" class="p-0">
+                                <div x-show="!editing" class="grid grid-cols-5 items-center gap-2 px-2 py-2">
+                                    <span>{{ $keyword->term }}</span>
+                                    <span>{{ $keyword->search_engine }}</span>
+                                    <span class="capitalize">{{ $keyword->device }}</span>
+                                    <span>{{ $keyword->latestSnapshot?->position ?? '-' }}</span>
+                                    <span class="flex justify-end gap-2 text-xs">
+                                        <button type="button" @click="editing = true" class="rounded border border-slate-700 px-2 py-1 hover:border-sky-400 hover:text-sky-300">Edit</button>
+                                        <form action="{{ route('keywords.destroy', $keyword) }}" method="post" onsubmit="return confirm('Delete keyword &quot;{{ $keyword->term }}&quot;?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="rounded border border-red-500/50 px-2 py-1 text-red-300">Delete</button>
+                                        </form>
+                                    </span>
+                                </div>
+
+                                <form x-show="editing" action="{{ route('keywords.update', $keyword) }}" method="post"
+                                      class="grid grid-cols-2 gap-2 px-2 py-2 sm:grid-cols-5">
+                                    @csrf
+                                    @method('PUT')
+                                    <input name="term" value="{{ $keyword->term }}" required
+                                           class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    <input name="search_engine" value="{{ $keyword->search_engine }}" required
+                                           class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    <select name="device" class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                        <option value="desktop" @selected($keyword->device === 'desktop')>Desktop</option>
+                                        <option value="mobile" @selected($keyword->device === 'mobile')>Mobile</option>
+                                    </select>
+                                    <select name="priority" class="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                        <option value="1" @selected($keyword->priority === 1)>Priority 1</option>
+                                        <option value="2" @selected($keyword->priority === 2)>Priority 2</option>
+                                        <option value="3" @selected($keyword->priority === 3)>Priority 3</option>
+                                    </select>
+                                    <input type="hidden" name="target_url" value="{{ $keyword->target_url }}">
+                                    <input type="hidden" name="location" value="{{ $keyword->location }}">
+                                    <div class="flex justify-end gap-2">
+                                        <button type="button" @click="editing = false" class="rounded border border-slate-700 px-2 py-1 text-xs hover:border-slate-500">Cancel</button>
+                                        <button type="submit" class="rounded bg-sky-600 px-2 py-1 text-xs font-medium text-white hover:bg-sky-500">Save</button>
+                                    </div>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-2 py-4 text-slate-500">No keywords yet.</td>
+                            <td colspan="5" class="px-2 py-4 text-slate-500">No keywords yet. Use "+ Add keyword" above to track your first one.</td>
                         </tr>
                     @endforelse
                     </tbody>
