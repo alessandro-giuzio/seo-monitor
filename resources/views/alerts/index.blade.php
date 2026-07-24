@@ -59,7 +59,12 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="px-3 py-5 text-slate-500">No alerts yet.</td></tr>
+                    <tr>
+                        <td colspan="7" class="px-3 py-10 text-center">
+                            <p class="text-sm font-medium text-slate-300">No alerts yet</p>
+                            <p class="mt-1 text-xs text-slate-500">Click "Run evaluation" above to check your websites for issues.</p>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

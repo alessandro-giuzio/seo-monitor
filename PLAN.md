@@ -25,11 +25,15 @@ There's a prioritized backlog in `NEXT_STEPS.md` (written 2026-05-18) with 7 ite
 ### 4. Flash message toasts — already done (pre-existing, not part of this backlog work)
 - Turns out `resources/views/components/layouts/app.blade.php` already renders `session('status')` in an emerald banner and `$errors->any()` in a red banner inside `<main>` (found while working on item #3). No work needed here — NEXT_STEPS.md was stale on this item.
 
-## Not started — remaining backlog from NEXT_STEPS.md, in priority order
+### 5. Empty states on list pages — ✅ done
+- `resources/views/backlinks/index.blade.php`: backlinks table empty state now points to the "Add Backlink" form above.
+- `resources/views/competitors/index.blade.php`: two empty states — competitors list (points to "Add Competitor" form) and the keyword-gap table (explains it needs a competitor + ranking snapshot first, since gap rows are computed, not manually added).
+- `resources/views/alerts/index.blade.php`: empty state points to the "Run evaluation" button (alerts are generated, not manually added).
+- `resources/views/keyword-research/index.blade.php`: empty state points to the add-idea form / bulk import / clearing filters.
+- All styled consistently: centered text block, `text-sm font-medium text-slate-300` heading + `text-xs text-slate-500` subtext, in place of the old one-line `text-slate-500` message.
+- Verified via curl: all four pages return 200 and render their respective empty-state copy.
 
-### 5. Empty states on list pages — MEDIUM
-- Files: `resources/views/backlinks/index.blade.php`, `competitors/index.blade.php`, `alerts/index.blade.php`, `keyword-research/index.blade.php`.
-- Add a message + CTA inside each `@forelse`/`@empty` block (audits/index.blade.php already has a minimal one-line empty state — that's the low bar; these should include a link/button to add the first item).
+## Not started — remaining backlog from NEXT_STEPS.md, in priority order
 
 ### 6. Website edit/delete from index page — LOW
 - File: `resources/views/websites/index.blade.php`.

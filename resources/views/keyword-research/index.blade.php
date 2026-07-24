@@ -118,7 +118,12 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="px-3 py-5 text-slate-500">No ideas found.</td></tr>
+                    <tr>
+                        <td colspan="7" class="px-3 py-10 text-center">
+                            <p class="text-sm font-medium text-slate-300">No ideas found</p>
+                            <p class="mt-1 text-xs text-slate-500">Add a keyword idea above, bulk import a list, or clear your filters.</p>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

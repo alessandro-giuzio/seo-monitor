@@ -52,7 +52,10 @@
                             </form>
                         </div>
                     @empty
-                        <p class="text-slate-500">No competitors yet.</p>
+                        <div class="rounded-md border border-dashed border-slate-800 p-6 text-center">
+                            <p class="text-sm font-medium text-slate-300">No competitors yet</p>
+                            <p class="mt-1 text-xs text-slate-500">Use the "Add Competitor" form to track your first one.</p>
+                        </div>
                     @endforelse
                 </div>
             </article>
@@ -85,7 +88,12 @@
                             <td class="px-3 py-3">{{ $row['gap'] ?? 'n/a' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="px-3 py-5 text-slate-500">No gap opportunities yet.</td></tr>
+                        <tr>
+                            <td colspan="6" class="px-3 py-10 text-center">
+                                <p class="text-sm font-medium text-slate-300">No gap opportunities yet</p>
+                                <p class="mt-1 text-xs text-slate-500">Add a competitor and a ranking snapshot to surface keyword gaps.</p>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
