@@ -89,6 +89,12 @@ class Website extends Model
     }
 
     /**
+     * Ordered by metric_date by default. Aggregate queries built on this relation
+     * (groupBy + SUM, etc.) must call ->reorder() first — the inherited ORDER BY
+     * is harmless on SQLite but PostgreSQL rejects it (42803: must appear in the
+     * GROUP BY clause or be used in an aggregate function). Several other Website
+     * relations below carry the same default-ordering pattern.
+     *
      * @return HasMany<GscMetric, $this>
      */
     public function gscMetrics(): HasMany

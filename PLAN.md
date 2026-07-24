@@ -87,9 +87,9 @@ The UI backlog is done and the two production 500s are fixed. Ran a broader swee
 - Verified via curl: submitting an audit for a nonexistent domain (`this-domain-does-not-exist-xyz123.invalid`) now redirects back to `/audits` with "Unable to reach URL: cURL error 6: Could not resolve host..." instead of a 500.
 - (`RedirectManagerController`'s check-redirect action already did this correctly — used as the reference pattern.)
 
-### 3. LOW — Document the "relation default orderBy + groupBy" footgun
+### 3. LOW — Document the "relation default orderBy + groupBy" footgun — ✅ done
 - `Website` model relations almost all carry a default `orderBy`/`orderByDesc` (`gscMetrics`, `domainMetricsSnapshots`, `crawlRuns`, `crawlPages`, `seoAlerts`, `seoTasks`, `seoChangeLogs`, `redirectRules`, `releaseQaRuns` — `app/Models/Website.php:64-160`). This is exactly what caused the Postgres `GROUP BY` bug already fixed. Confirmed no other current controller combines one of these relations with `groupBy()` (only `DashboardController`'s `groupBy('keyword_id')` exists elsewhere, and it queries `RankingSnapshot` directly, not through a defaulted relation — safe as-is).
-- No code change needed now, but worth a one-line comment on `Website::gscMetrics()` (and maybe a `CLAUDE.md` note) warning that any future aggregate query built on these relations needs `->reorder()` first, since this class of bug is invisible on SQLite and only surfaces on production Postgres.
+- Added a doc comment on `Website::gscMetrics()` explaining the `->reorder()` requirement and noting the other relations share the pattern, plus a `CLAUDE.md` "Database" bullet covering both this and the migration-rename risk, so future sessions don't have to rediscover it from a production incident.
 
 ### 4. LOW / long-term — Add regression tests
 - No feature tests exist for any controller. At minimum, worth adding a regression test for the `gsc_metrics` `reorder()` fix (easy to silently reintroduce) and a test asserting `RunScheduledSeoChecks` continues past an unreachable website once #1 is fixed. Broader controller test coverage is a bigger, separate undertaking — flagging it, not proposing to do it all now.

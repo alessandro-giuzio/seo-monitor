@@ -46,6 +46,8 @@ No `php artisan serve` needed — Herd handles it.
 ### Database
 - Migrations must be in correct timestamp order — foreign key tables before dependent tables
 - Run `php artisan migrate` locally after pulling new migrations
+- **Renaming/reordering an already-deployed migration file is risky**: Laravel tracks migrations by filename, so production's already-migrated tables become invisible to `migrate:status` under a new name, which can desync production without dropping any real schema. Always flag this before doing it.
+- **SQLite (local) is more lenient than PostgreSQL (production) on `GROUP BY`.** Several `Website` relations (`gscMetrics`, `crawlRuns`, `domainMetricsSnapshots`, `seoAlerts`, etc. — see `app/Models/Website.php`) carry a default `orderBy`/`orderByDesc`. Any aggregate query built on one of these (`groupBy()` + `SUM`/`COUNT`/etc.) must call `->reorder()` first, or PostgreSQL will throw `42803` even though it works fine locally. This already broke `/reports` and `/content-decay` in production once.
 
 ## Deployment
 
