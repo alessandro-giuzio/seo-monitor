@@ -28,7 +28,7 @@ No `php artisan serve` needed — Herd handles it.
 
 ### Views
 - All authenticated views use `<x-layouts.app :title="'Page Title'">` — the dark layout at `resources/views/components/layouts/app.blade.php`
-- Auth pages (login etc.) use `<x-guest-layout>` — needs restyle to dark theme (see NEXT_STEPS.md)
+- Auth pages (login etc.) use `<x-guest-layout>` — already dark-themed
 - Card style: `rounded-xl border border-slate-800 bg-slate-900/70 p-4`
 - Input style: `rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm focus:border-sky-500 focus:outline-none`
 - Color palette: slate-950 background, sky-300/400 accents, emerald-400 success, red-400 danger, slate-400 muted text
@@ -76,13 +76,9 @@ https://seo.xrun.gdn/up → should return `{"status":"ok"}`
 
 ## What still needs work
 
-See `NEXT_STEPS.md` in the project root for the full prioritised list. Top items:
+See `PLAN.md` in the project root — it's the live status doc (what's done, what's next, and production incidents found along the way). `NEXT_STEPS.md` is the original UI backlog and is now historical; every item on it has been completed or superseded by `PLAN.md`.
 
-1. Login page dark theme restyle (`resources/views/auth/login.blade.php`)
-2. "Run audit" button on `/audits` page (`resources/views/audits/index.blade.php`)
-3. Active nav link highlighting (`resources/views/components/layouts/app.blade.php`)
-4. Flash message toasts in the main layout
-5. Empty states on list pages
+As of the last update, the only open item is broader automated test coverage (currently just Pest scaffolding — no feature tests exist for any controller).
 
 ## Creating a new user (production)
 
