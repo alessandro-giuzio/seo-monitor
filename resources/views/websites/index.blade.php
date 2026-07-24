@@ -99,11 +99,42 @@
         {{-- Website grid --}}
         <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             @foreach ($websites as $website)
-                <a href="{{ route('websites.show', $website) }}" class="rounded-xl border border-slate-800 bg-slate-900/70 p-4 hover:border-sky-400/60">
-                    <h2 class="text-lg font-medium">{{ $website->name }}</h2>
-                    <p class="mt-1 text-sm text-slate-400">{{ $website->base_url }}</p>
-                    <p class="mt-3 text-xs text-slate-500">Updated {{ $website->updated_at->diffForHumans() }}</p>
-                </a>
+                <div x-data="{ menu: false, editing: false }" class="relative rounded-xl border border-slate-800 bg-slate-900/70 p-4 hover:border-sky-400/60">
+                    <button @click="menu = !menu" @click.outside="menu = false"
+                            class="absolute right-3 top-3 rounded-md px-1.5 py-1 text-slate-500 hover:bg-slate-800 hover:text-slate-300">
+                        ⋯
+                    </button>
+                    <div x-show="menu" x-transition @click.outside="menu = false"
+                         class="absolute right-3 top-9 z-10 w-32 rounded-lg border border-slate-700 bg-slate-900 py-1 text-sm shadow-lg">
+                        <button type="button" @click="editing = true; menu = false"
+                                class="block w-full px-3 py-1.5 text-left hover:bg-slate-800">Edit</button>
+                        <form action="{{ route('websites.destroy', $website) }}" method="post"
+                              onsubmit="return confirm('Delete {{ $website->name }}?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="block w-full px-3 py-1.5 text-left text-red-300 hover:bg-slate-800">Delete</button>
+                        </form>
+                    </div>
+
+                    <a href="{{ route('websites.show', $website) }}" x-show="!editing" class="block pr-6">
+                        <h2 class="text-lg font-medium">{{ $website->name }}</h2>
+                        <p class="mt-1 text-sm text-slate-400">{{ $website->base_url }}</p>
+                        <p class="mt-3 text-xs text-slate-500">Updated {{ $website->updated_at->diffForHumans() }}</p>
+                    </a>
+
+                    <form x-show="editing" action="{{ route('websites.update', $website) }}" method="post" class="grid gap-2 pr-6">
+                        @csrf
+                        @method('PUT')
+                        <input type="text" name="name" value="{{ $website->name }}" required
+                               class="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                        <input type="url" name="base_url" value="{{ $website->base_url }}" required
+                               class="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                        <div class="flex justify-end gap-2">
+                            <button type="button" @click="editing = false" class="rounded-md border border-slate-700 px-2 py-1 text-xs hover:border-slate-500">Cancel</button>
+                            <button type="submit" class="rounded-md bg-sky-600 px-2 py-1 text-xs font-medium text-white hover:bg-sky-500">Save</button>
+                        </div>
+                    </form>
+                </div>
             @endforeach
         </div>
 

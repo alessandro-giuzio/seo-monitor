@@ -33,11 +33,13 @@ There's a prioritized backlog in `NEXT_STEPS.md` (written 2026-05-18) with 7 ite
 - All styled consistently: centered text block, `text-sm font-medium text-slate-300` heading + `text-xs text-slate-500` subtext, in place of the old one-line `text-slate-500` message.
 - Verified via curl: all four pages return 200 and render their respective empty-state copy.
 
-## Not started — remaining backlog from NEXT_STEPS.md, in priority order
+### 6. Website edit/delete from index page — ✅ done
+- `resources/views/websites/index.blade.php`: each card is now a `div` with its own `x-data="{ menu, editing }"` scope (previously the whole card was a single `<a>`). A "⋯" button (top-right, `@click.outside` to close) opens a dropdown with Edit and Delete.
+- Edit toggles an inline form on the card itself (name + base_url, the two required fields) submitting `PUT` to `route('websites.update', $website)` — same route the full edit form on `websites/show.blade.php` already uses.
+- Delete submits a `DELETE` form to `route('websites.destroy', $website)` with a `confirm()` guard, matching the pattern used on backlinks/competitors delete buttons.
+- Verified end-to-end via curl: edited a website's name/URL and confirmed the change persisted, then created and deleted a scratch website to confirm the delete path works. No stray test data left behind.
 
-### 6. Website edit/delete from index page — LOW
-- File: `resources/views/websites/index.blade.php`.
-- Add an Alpine.js dropdown ("⋯" menu) per card with Edit/Delete, instead of requiring a click into `/websites/{id}` first.
+## Not started — remaining backlog from NEXT_STEPS.md, in priority order
 
 ### 7. Keyword inline edit — LOW
 - File: `resources/views/websites/show.blade.php`.
