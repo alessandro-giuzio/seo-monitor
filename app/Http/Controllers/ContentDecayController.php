@@ -25,6 +25,7 @@ class ContentDecayController extends Controller
                 $prev28End = now()->subDays(28)->toDateString();
 
                 $lastPeriod = $selectedWebsite->gscMetrics()
+                    ->reorder()
                     ->whereBetween('metric_date', [$last28Start, $today])
                     ->whereNotNull('page_url')
                     ->select('page_url', DB::raw('SUM(clicks) as clicks'))
@@ -32,6 +33,7 @@ class ContentDecayController extends Controller
                     ->pluck('clicks', 'page_url');
 
                 $prevPeriod = $selectedWebsite->gscMetrics()
+                    ->reorder()
                     ->whereBetween('metric_date', [$prev28Start, $prev28End])
                     ->whereNotNull('page_url')
                     ->select('page_url', DB::raw('SUM(clicks) as clicks'))

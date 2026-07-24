@@ -84,6 +84,7 @@ class ReportController extends Controller
         $prev28End = now()->subDays(28)->toDateString();
 
         $lastPeriod = $website->gscMetrics()
+            ->reorder()
             ->whereBetween('metric_date', [$last28Start, now()->toDateString()])
             ->whereNotNull('page_url')
             ->select('page_url', DB::raw('SUM(clicks) as clicks'))
@@ -91,6 +92,7 @@ class ReportController extends Controller
             ->pluck('clicks', 'page_url');
 
         $prevPeriod = $website->gscMetrics()
+            ->reorder()
             ->whereBetween('metric_date', [$prev28Start, $prev28End])
             ->whereNotNull('page_url')
             ->select('page_url', DB::raw('SUM(clicks) as clicks'))
