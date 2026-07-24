@@ -55,10 +55,19 @@ All 7 items from `NEXT_STEPS.md` are done. Nothing outstanding from that list �
 - Fixed by adding `->reorder()` before the aggregate query in both controllers. Confirmed via `php artisan tinker` in the Coolify production terminal (calling the controller method directly, bypassing HTTP) that this was the exact exception, then verified the fix locally (SQL no longer contains `ORDER BY`, both pages return 200) before pushing.
 - Also ruled out during this investigation: production's `migrate:status` shows `websites`, `competitor_keyword_snapshots`, `crawl_runs`, `release_qa_runs` as "Pending" due to two early migration-file renames (commits `86e326a`, `852895c`) — Laravel tracks migrations by filename, so production's already-migrated tables under the old names look unrecognized. This is bookkeeping drift only (proved via FK dependents that already ran successfully), not missing schema — did not need fixing for this incident, but worth knowing about if a future migration change touches those tables.
 
-### `/profile` 500 error — ✅ fixed (uncommitted as of this writing, fix in progress)
+### `/profile` 500 error — ✅ fixed (commit 4f36901)
 - Leftover Breeze scaffolding: `resources/views/profile/partials/update-profile-information-form.blade.php` had a hidden form with `action="{{ route('verification.send') }}"` evaluated unconditionally (email verification was never enabled — `MustVerifyEmail` is commented out on `App\Models\User`), and `resources/views/profile/partials/update-password-form.blade.php` posted to `route('password.update')`, which was never registered as a route (the controller `App\Http\Controllers\Auth\PasswordController@update` existed but nothing pointed at it).
 - Fix: added `Route::put('/password', [PasswordController::class, 'update'])->name('password.update')` inside the authenticated group in `routes/web.php`; removed the dead verification-resend form and its guarding `@if` block from `update-profile-information-form.blade.php` entirely (unreachable dead code, not just unrouted).
 - Verified end-to-end via curl: `/profile` returns 200, submitted a real password change, confirmed login with the new password worked, then reverted the password back to `password` so local dev credentials stay unchanged.
+- No migration/schema involved, no production DB risk.
+
+## Dead Breeze scaffolding removed (commit pending)
+While fixing `/profile`, found a broader set of Breeze leftovers that were never wired to any route and had zero references anywhere else in the codebase (confirmed via full-repo grep before deleting). Removed:
+- Views: `welcome.blade.php`, `auth/register.blade.php`, `auth/confirm-password.blade.php`, `auth/verify-email.blade.php`, `layouts/app.blade.php` (old Breeze layout, distinct from the live `components/layouts/app.blade.php`), `layouts/navigation.blade.php`, `components/dropdown.blade.php`, `components/dropdown-link.blade.php`, `components/nav-link.blade.php`, `components/responsive-nav-link.blade.php`.
+- Controllers: `Auth/RegisteredUserController.php`, `Auth/ConfirmablePasswordController.php`, `Auth/EmailVerificationPromptController.php`, `Auth/EmailVerificationNotificationController.php`, `Auth/VerifyEmailController.php`.
+- Component class: `App\View\Components\AppLayout` (rendered the dead `layouts/app.blade.php`, itself never invoked via `<x-app-layout>` anywhere).
+- Kept: `modal.blade.php`, `secondary-button.blade.php`, `danger-button.blade.php` — these looked like similar Breeze leftovers but are actually live, used by `profile/partials/delete-user-form.blade.php` (the delete-account confirmation modal on the real `/profile` page).
+- Verified: `composer dump-autoload` clean, `route:list` still resolves (63 routes), and smoke-tested `/`, `/profile`, `/websites`, `/audits`, `/reports`, `/content-decay`, `/technical`, `/alerts`, `/checklist` all return 200 after deletion.
 
 ## Verification checklist for next session
 - `npm run dev` running, Herd serving `http://seo-demo.test`.
