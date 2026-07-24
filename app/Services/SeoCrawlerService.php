@@ -17,6 +17,21 @@ class SeoCrawlerService
             'pages_crawled' => 0,
         ]);
 
+        try {
+            return $this->crawl($website, $run, $maxPages);
+        } catch (\Throwable $e) {
+            $run->update([
+                'finished_at' => now(),
+                'status' => 'failed',
+                'summary' => ['error' => $e->getMessage()],
+            ]);
+
+            throw $e;
+        }
+    }
+
+    private function crawl(Website $website, CrawlRun $run, int $maxPages): CrawlRun
+    {
         $baseUrl = rtrim($website->base_url, '/');
         $baseHost = (string) parse_url($baseUrl, PHP_URL_HOST);
         $robotsUrl = $baseUrl.'/robots.txt';

@@ -38,10 +38,23 @@ class RunScheduledSeoChecks extends Command
             return self::SUCCESS;
         }
 
+        $failures = 0;
+
         foreach ($dueWebsites as $website) {
             $this->info("Running crawl for {$website->name} ({$website->base_url})");
-            $run = $crawlerService->runForWebsite($website, 30);
-            $this->line("Crawled {$run->pages_crawled} pages.");
+
+            try {
+                $run = $crawlerService->runForWebsite($website, 30);
+                $this->line("Crawled {$run->pages_crawled} pages.");
+            } catch (\Throwable $e) {
+                $failures++;
+                $this->error("Crawl failed for {$website->name}: {$e->getMessage()}");
+                report($e);
+            }
+        }
+
+        if ($failures > 0) {
+            $this->warn("{$failures} website(s) failed to crawl — see log for details.");
         }
 
         return self::SUCCESS;

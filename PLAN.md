@@ -69,6 +69,36 @@ While fixing `/profile`, found a broader set of Breeze leftovers that were never
 - Kept: `modal.blade.php`, `secondary-button.blade.php`, `danger-button.blade.php` — these looked like similar Breeze leftovers but are actually live, used by `profile/partials/delete-user-form.blade.php` (the delete-account confirmation modal on the real `/profile` page).
 - Verified: `composer dump-autoload` clean, `route:list` still resolves (63 routes), and smoke-tested `/`, `/profile`, `/websites`, `/audits`, `/reports`, `/content-decay`, `/technical`, `/alerts`, `/checklist` all return 200 after deletion.
 
+## What's next: reliability audit
+
+The UI backlog is done and the two production 500s are fixed. Ran a broader sweep for the same *classes* of bug rather than guessing at new features, since this app has zero automated test coverage (`tests/` only has Pest scaffolding + example tests — nothing exercises any of the 15+ controllers). Findings, in priority order:
+
+### 1. HIGH — Scheduled crawler crashes the whole hourly run on one unreachable website — ✅ fixed
+- `Schedule::command('seo:run-scheduled')->hourly()` (`routes/console.php`) runs `App\Console\Commands\RunScheduledSeoChecks`, which loops all due websites and calls `SeoCrawlerService::runForWebsite()` for each.
+- `SeoCrawlerService` makes 3 unguarded `Http::get()` calls (`app/Services/SeoCrawlerService.php` — robots.txt, sitemap.xml, and page fetches) with no try/catch. Reproduced locally: `php artisan seo:run-scheduled` threw an uncaught `Illuminate\Http\Client\ConnectionException` ("Could not resolve host") the moment it hit a website whose `base_url` isn't reachable, and the command exited 1 — almost certainly the cause of the `exit status 1` seen in the production cron logs earlier in this session, silently killing the crawl for every other due website in that run.
+- Also found while fixing this: if the crawl throws mid-run, the `CrawlRun` row it already created stays stuck at `status = 'running'` forever — no code path ever marked it failed.
+- Fix: `SeoCrawlerService::runForWebsite()` now wraps the actual crawl logic (extracted into a private `crawl()` method) in try/catch — on any `Throwable`, it updates the run to `status = 'failed'` with the error message in `summary`, then rethrows. `RunScheduledSeoChecks::handle()` now catches per-website, logs via `report($e)` and `$this->error(...)`, and continues to the next website instead of aborting; the command still returns `SUCCESS` overall since a single unreachable target isn't a command-level failure.
+- Verified: reproduced the original failure against a website with an unresolvable domain, confirmed the command now logs "Crawl failed for ... " and *continues* to crawl the next website successfully, and confirmed via `tinker` that the failed run's DB row lands cleanly at `status = 'failed'` with the error captured, not stuck at `running`. Confirmed `technical/run.blade.php` renders `$run->status` as plain text, so the new `failed` value needs no view changes.
+- No migration/schema change — `crawl_runs.status` is a plain unconstrained `string` column.
+
+### 2. MEDIUM — Same unguarded-HTTP-exception shape in `SeoAuditController@store`
+- `app/Http/Controllers/SeoAuditController.php:47` fetches the audited URL with no try/catch. It already handles non-2xx responses gracefully (`->withErrors(['url' => 'Unable to fetch URL...'])`), but a DNS failure or connection timeout throws instead of returning a response, producing a raw 500 for the user instead of the same friendly validation error.
+- Fix: wrap the `Http::get()` call in try/catch, convert `ConnectionException` into the same `back()->withErrors([...])` path already used for bad status codes.
+- (`RedirectManagerController`'s check-redirect action already does this correctly — good reference pattern already in the codebase.)
+
+### 3. LOW — Document the "relation default orderBy + groupBy" footgun
+- `Website` model relations almost all carry a default `orderBy`/`orderByDesc` (`gscMetrics`, `domainMetricsSnapshots`, `crawlRuns`, `crawlPages`, `seoAlerts`, `seoTasks`, `seoChangeLogs`, `redirectRules`, `releaseQaRuns` — `app/Models/Website.php:64-160`). This is exactly what caused the Postgres `GROUP BY` bug already fixed. Confirmed no other current controller combines one of these relations with `groupBy()` (only `DashboardController`'s `groupBy('keyword_id')` exists elsewhere, and it queries `RankingSnapshot` directly, not through a defaulted relation — safe as-is).
+- No code change needed now, but worth a one-line comment on `Website::gscMetrics()` (and maybe a `CLAUDE.md` note) warning that any future aggregate query built on these relations needs `->reorder()` first, since this class of bug is invisible on SQLite and only surfaces on production Postgres.
+
+### 4. LOW / long-term — Add regression tests
+- No feature tests exist for any controller. At minimum, worth adding a regression test for the `gsc_metrics` `reorder()` fix (easy to silently reintroduce) and a test asserting `RunScheduledSeoChecks` continues past an unreachable website once #1 is fixed. Broader controller test coverage is a bigger, separate undertaking — flagging it, not proposing to do it all now.
+
+## Verification checklist for next session
+- `npm run dev` running, Herd serving `http://seo-demo.test`.
+- Login: giuzio@icloud.com / password (per `NEXT_STEPS.md`).
+- For #1 and #2: reproduce locally first with a deliberately unreachable URL/website (`php artisan seo:run-scheduled` against a fake `base_url`, or submitting an audit for a non-existent domain) before and after the fix.
+- Remember: any change touching migrations needs the production-DB caution called out earlier in this file — these two fixes do not.
+
 ## Verification checklist for next session
 - `npm run dev` running, Herd serving `http://seo-demo.test`.
 - Login: giuzio@icloud.com / password (per `NEXT_STEPS.md`).
