@@ -18,15 +18,14 @@ There's a prioritized backlog in `NEXT_STEPS.md` (written 2026-05-18) with 7 ite
 - `resources/views/audits/index.blade.php` has a collapsible Alpine.js form (matching the `websites/index.blade.php` pattern): URL (required), website dropdown (optional), and a "more options" section for raw HTML / audited-at, posting to `route('audits.store')`.
 - Verified end-to-end via curl: submitted a real audit, redirected to `audits/{id}` with "Audit completed" flash, confirmed row appears in the list. Test data cleaned up afterward.
 
+### 3. Active nav link highlighting — ✅ done
+- `resources/views/components/layouts/app.blade.php`: nav links now built from a `$navLinks` array (`[route name, routeIs pattern, label]`) rendered via `@foreach`, with `@class` conditionally applying `border-sky-400 text-sky-300 bg-sky-500/10` when `request()->routeIs($pattern)` matches (wildcard patterns like `technical.*` so sub-pages like `technical.runs.show` also highlight the parent link).
+- Verified via curl on `/audits` and `/` (dashboard) — correct link highlighted on each; spot-checked remaining nav pages (websites, gsc, domain-overview, keyword-research, competitors, backlinks, technical, link-opportunities, alerts, reports, change-log, redirects, release-qa, checklist) all still return 200.
+
+### 4. Flash message toasts — already done (pre-existing, not part of this backlog work)
+- Turns out `resources/views/components/layouts/app.blade.php` already renders `session('status')` in an emerald banner and `$errors->any()` in a red banner inside `<main>` (found while working on item #3). No work needed here — NEXT_STEPS.md was stale on this item.
+
 ## Not started — remaining backlog from NEXT_STEPS.md, in priority order
-
-### 3. Active nav link highlighting — MEDIUM
-- File: `resources/views/components/layouts/app.blade.php` (nav links section, ~lines 18–40).
-- Use `request()->routeIs('dashboard')` etc. per link to conditionally add `border-sky-400 text-sky-300` classes to the current page's link. All nav links follow the same repeated class pattern (`rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300`), so this is a per-`<a>` conditional class tweak, not a structural change.
-
-### 4. Flash message toasts — MEDIUM
-- File: `resources/views/components/layouts/app.blade.php` (add banner after `<header>`).
-- Session already sets `status` flash on redirects (see `SeoAuditController@store` and others using `->with('status', ...)`) but nothing renders it in the authenticated layout. Add a dismissible banner reading `session('status')` (success/emerald) and `session('error')` (danger/red) — Alpine.js `x-data`/`x-show` for dismiss, consistent with the toggle pattern already used elsewhere.
 
 ### 5. Empty states on list pages — MEDIUM
 - Files: `resources/views/backlinks/index.blade.php`, `competitors/index.blade.php`, `alerts/index.blade.php`, `keyword-research/index.blade.php`.

@@ -19,24 +19,36 @@
                     </div>
                 </a>
             </div>
+            @php
+                $navLinks = [
+                    ['dashboard', 'dashboard', 'Dashboard'],
+                    ['websites.index', 'websites.*', 'Websites'],
+                    ['gsc.index', 'gsc.*', 'GSC'],
+                    ['domain-overview.index', 'domain-overview.*', 'Domain'],
+                    ['keyword-research.index', 'keyword-research.*', 'Keywords'],
+                    ['competitors.index', 'competitors.*', 'Gap'],
+                    ['backlinks.index', 'backlinks.*', 'Backlinks'],
+                    ['technical.index', 'technical.*', 'Technical'],
+                    ['decay.index', 'decay.*', 'Decay'],
+                    ['links.index', 'links.*', 'Link Ops'],
+                    ['alerts.index', 'alerts.*', 'Alerts'],
+                    ['reports.index', 'reports.*', 'Reports'],
+                    ['change-log.index', 'change-log.*', 'Change Log'],
+                    ['redirects.index', 'redirects.*', 'Redirects'],
+                    ['release-qa.index', 'release-qa.*', 'Release QA'],
+                    ['checklist.index', 'checklist.*', 'Checklist'],
+                    ['audits.index', 'audits.*', 'Audits'],
+                ];
+            @endphp
             <div class="flex flex-1 flex-wrap items-center justify-start gap-2 pt-1 text-sm lg:justify-end lg:pt-0">
-                <a href="{{ route('dashboard') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Dashboard</a>
-                <a href="{{ route('websites.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Websites</a>
-                <a href="{{ route('gsc.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">GSC</a>
-                <a href="{{ route('domain-overview.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Domain</a>
-                <a href="{{ route('keyword-research.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Keywords</a>
-                <a href="{{ route('competitors.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Gap</a>
-                <a href="{{ route('backlinks.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Backlinks</a>
-                <a href="{{ route('technical.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Technical</a>
-                <a href="{{ route('decay.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Decay</a>
-                <a href="{{ route('links.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Link Ops</a>
-                <a href="{{ route('alerts.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Alerts</a>
-                <a href="{{ route('reports.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Reports</a>
-                <a href="{{ route('change-log.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Change Log</a>
-                <a href="{{ route('redirects.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Redirects</a>
-                <a href="{{ route('release-qa.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Release QA</a>
-                <a href="{{ route('checklist.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Checklist</a>
-                <a href="{{ route('audits.index') }}" class="rounded-md border border-slate-700 px-3 py-1.5 hover:border-sky-400 hover:text-sky-300">Audits</a>
+                @foreach ($navLinks as [$route, $pattern, $label])
+                    <a href="{{ route($route) }}"
+                       @class([
+                           'rounded-md border px-3 py-1.5',
+                           'border-sky-400 text-sky-300 bg-sky-500/10' => request()->routeIs($pattern),
+                           'border-slate-700 hover:border-sky-400 hover:text-sky-300' => ! request()->routeIs($pattern),
+                       ])>{{ $label }}</a>
+                @endforeach
 
                 {{-- User menu --}}
                 <div x-data="{ open: false }" class="relative ml-2">
