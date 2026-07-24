@@ -81,10 +81,11 @@ The UI backlog is done and the two production 500s are fixed. Ran a broader swee
 - Verified: reproduced the original failure against a website with an unresolvable domain, confirmed the command now logs "Crawl failed for ... " and *continues* to crawl the next website successfully, and confirmed via `tinker` that the failed run's DB row lands cleanly at `status = 'failed'` with the error captured, not stuck at `running`. Confirmed `technical/run.blade.php` renders `$run->status` as plain text, so the new `failed` value needs no view changes.
 - No migration/schema change — `crawl_runs.status` is a plain unconstrained `string` column.
 
-### 2. MEDIUM — Same unguarded-HTTP-exception shape in `SeoAuditController@store`
-- `app/Http/Controllers/SeoAuditController.php:47` fetches the audited URL with no try/catch. It already handles non-2xx responses gracefully (`->withErrors(['url' => 'Unable to fetch URL...'])`), but a DNS failure or connection timeout throws instead of returning a response, producing a raw 500 for the user instead of the same friendly validation error.
-- Fix: wrap the `Http::get()` call in try/catch, convert `ConnectionException` into the same `back()->withErrors([...])` path already used for bad status codes.
-- (`RedirectManagerController`'s check-redirect action already does this correctly — good reference pattern already in the codebase.)
+### 2. MEDIUM — Same unguarded-HTTP-exception shape in `SeoAuditController@store` — ✅ fixed
+- `app/Http/Controllers/SeoAuditController.php` fetched the audited URL with no try/catch. It already handled non-2xx responses gracefully (`->withErrors(['url' => 'Unable to fetch URL...'])`), but a DNS failure or connection timeout threw instead of returning a response, producing a raw 500 for the user instead of the same friendly validation error.
+- Fix: wrapped the `Http::get()` call in try/catch on `Illuminate\Http\Client\ConnectionException`, converting it into the same `back()->withErrors(['url' => ...])->withInput()` path already used for bad status codes.
+- Verified via curl: submitting an audit for a nonexistent domain (`this-domain-does-not-exist-xyz123.invalid`) now redirects back to `/audits` with "Unable to reach URL: cURL error 6: Could not resolve host..." instead of a 500.
+- (`RedirectManagerController`'s check-redirect action already did this correctly — used as the reference pattern.)
 
 ### 3. LOW — Document the "relation default orderBy + groupBy" footgun
 - `Website` model relations almost all carry a default `orderBy`/`orderByDesc` (`gscMetrics`, `domainMetricsSnapshots`, `crawlRuns`, `crawlPages`, `seoAlerts`, `seoTasks`, `seoChangeLogs`, `redirectRules`, `releaseQaRuns` — `app/Models/Website.php:64-160`). This is exactly what caused the Postgres `GROUP BY` bug already fixed. Confirmed no other current controller combines one of these relations with `groupBy()` (only `DashboardController`'s `groupBy('keyword_id')` exists elsewhere, and it queries `RankingSnapshot` directly, not through a defaulted relation — safe as-is).

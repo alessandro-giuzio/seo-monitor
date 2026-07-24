@@ -6,6 +6,7 @@ use App\Models\SeoAudit;
 use App\Models\Website;
 use DOMDocument;
 use DOMXPath;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
@@ -44,11 +45,17 @@ class SeoAuditController extends Controller
         $html = $validated['raw_html'] ?? null;
 
         if (blank($html)) {
-            $response = Http::timeout(15)
-                ->withHeaders([
-                    'User-Agent' => 'SEO Toolkit Bot/1.0 (+https://seo-toolkit.local)',
-                    'Accept' => 'text/html,application/xhtml+xml',
-                ])->get($validated['url']);
+            try {
+                $response = Http::timeout(15)
+                    ->withHeaders([
+                        'User-Agent' => 'SEO Toolkit Bot/1.0 (+https://seo-toolkit.local)',
+                        'Accept' => 'text/html,application/xhtml+xml',
+                    ])->get($validated['url']);
+            } catch (ConnectionException $e) {
+                return back()->withErrors([
+                    'url' => 'Unable to reach URL: '.$e->getMessage(),
+                ])->withInput();
+            }
 
             if (! $response->successful()) {
                 return back()->withErrors([
