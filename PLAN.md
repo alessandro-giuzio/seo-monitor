@@ -48,6 +48,18 @@ There's a prioritized backlog in `NEXT_STEPS.md` (written 2026-05-18) with 7 ite
 ## Backlog complete
 All 7 items from `NEXT_STEPS.md` are done. Nothing outstanding from that list — future work would need a fresh pass to identify next priorities (or re-check NEXT_STEPS.md itself, since it turned out stale on items #4 and #7).
 
+## Bugs found and fixed after the backlog (production incidents)
+
+### Postgres GROUP BY error on `/reports` and `/content-decay` — ✅ fixed (commit c55d064)
+- `Website::gscMetrics()` (`app/Models/Website.php:94`) has a default `orderByDesc('metric_date')` on the relation. `ContentDecayController::index()` and `ReportController::buildReportData()` both build an aggregate query on top of it (`groupBy('page_url')` + `SUM(clicks)`), and the inherited `ORDER BY metric_date` survived into the final SQL. SQLite tolerates this; PostgreSQL's strict mode rejects it (`42803`), which is what was 500ing both pages in production.
+- Fixed by adding `->reorder()` before the aggregate query in both controllers. Confirmed via `php artisan tinker` in the Coolify production terminal (calling the controller method directly, bypassing HTTP) that this was the exact exception, then verified the fix locally (SQL no longer contains `ORDER BY`, both pages return 200) before pushing.
+- Also ruled out during this investigation: production's `migrate:status` shows `websites`, `competitor_keyword_snapshots`, `crawl_runs`, `release_qa_runs` as "Pending" due to two early migration-file renames (commits `86e326a`, `852895c`) — Laravel tracks migrations by filename, so production's already-migrated tables under the old names look unrecognized. This is bookkeeping drift only (proved via FK dependents that already ran successfully), not missing schema — did not need fixing for this incident, but worth knowing about if a future migration change touches those tables.
+
+### `/profile` 500 error — ✅ fixed (uncommitted as of this writing, fix in progress)
+- Leftover Breeze scaffolding: `resources/views/profile/partials/update-profile-information-form.blade.php` had a hidden form with `action="{{ route('verification.send') }}"` evaluated unconditionally (email verification was never enabled — `MustVerifyEmail` is commented out on `App\Models\User`), and `resources/views/profile/partials/update-password-form.blade.php` posted to `route('password.update')`, which was never registered as a route (the controller `App\Http\Controllers\Auth\PasswordController@update` existed but nothing pointed at it).
+- Fix: added `Route::put('/password', [PasswordController::class, 'update'])->name('password.update')` inside the authenticated group in `routes/web.php`; removed the dead verification-resend form and its guarding `@if` block from `update-profile-information-form.blade.php` entirely (unreachable dead code, not just unrouted).
+- Verified end-to-end via curl: `/profile` returns 200, submitted a real password change, confirmed login with the new password worked, then reverted the password back to `password` so local dev credentials stay unchanged.
+
 ## Verification checklist for next session
 - `npm run dev` running, Herd serving `http://seo-demo.test`.
 - Login: giuzio@icloud.com / password (per `NEXT_STEPS.md`).

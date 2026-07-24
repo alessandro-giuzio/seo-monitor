@@ -21,6 +21,7 @@ use App\Http\Controllers\UptimeCheckController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\BacklinkController;
 use App\Http\Controllers\CompetitorController;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -30,6 +31,7 @@ Route::get('/', DashboardController::class)->name('dashboard');
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
 
 Route::get('/websites', [WebsiteController::class, 'index'])->name('websites.index');
 Route::get('/websites/{website}', [WebsiteController::class, 'show'])->name('websites.show');
