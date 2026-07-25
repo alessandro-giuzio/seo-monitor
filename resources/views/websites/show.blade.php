@@ -115,7 +115,7 @@
                     </thead>
                     <tbody>
                     @forelse ($website->keywords as $keyword)
-                        <tr class="border-b border-slate-900/70" x-data="{ editing: false }">
+                        <tr class="border-b border-slate-900/70" x-data="{ editing: false, logging: false }">
                             <td colspan="5" class="p-0">
                                 <div x-show="!editing" class="grid grid-cols-5 items-center gap-2 px-2 py-2">
                                     <span>{{ $keyword->term }}</span>
@@ -123,6 +123,7 @@
                                     <span class="capitalize">{{ $keyword->device }}</span>
                                     <span>{{ $keyword->latestSnapshot?->position ?? '-' }}</span>
                                     <span class="flex justify-end gap-2 text-xs">
+                                        <button type="button" @click="logging = !logging" class="rounded border border-slate-700 px-2 py-1 hover:border-sky-400 hover:text-sky-300">Log ranking</button>
                                         <button type="button" @click="editing = true" class="rounded border border-slate-700 px-2 py-1 hover:border-sky-400 hover:text-sky-300">Edit</button>
                                         <form action="{{ route('keywords.destroy', $keyword) }}" method="post" onsubmit="return confirm('Delete keyword &quot;{{ $keyword->term }}&quot;?')">
                                             @csrf
@@ -131,6 +132,35 @@
                                         </form>
                                     </span>
                                 </div>
+
+                                <form x-show="logging" x-transition action="{{ route('rankings.store', $keyword) }}" method="post"
+                                      class="grid grid-cols-2 gap-2 border-t border-slate-800 bg-slate-950/50 px-2 py-2 sm:grid-cols-5">
+                                    @csrf
+                                    <label class="text-xs text-slate-400 sm:col-span-1">Checked at
+                                        <input type="datetime-local" name="checked_at" value="{{ now()->format('Y-m-d\TH:i') }}" required
+                                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    </label>
+                                    <label class="text-xs text-slate-400">Position
+                                        <input type="number" name="position" min="1" max="1000" placeholder="e.g. 4"
+                                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    </label>
+                                    <label class="text-xs text-slate-400">Search volume
+                                        <input type="number" name="search_volume" min="0" placeholder="Optional"
+                                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    </label>
+                                    <label class="text-xs text-slate-400">Difficulty
+                                        <input type="number" name="difficulty" min="0" max="100" placeholder="Optional"
+                                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    </label>
+                                    <label class="text-xs text-slate-400">SERP features
+                                        <input name="serp_features" placeholder="featured snippet, sitelinks"
+                                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none">
+                                    </label>
+                                    <div class="flex items-end justify-end gap-2 sm:col-span-5">
+                                        <button type="button" @click="logging = false" class="rounded border border-slate-700 px-2 py-1 text-xs hover:border-slate-500">Cancel</button>
+                                        <button type="submit" class="rounded bg-sky-600 px-2 py-1 text-xs font-medium text-white hover:bg-sky-500">Save snapshot</button>
+                                    </div>
+                                </form>
 
                                 <form x-show="editing" action="{{ route('keywords.update', $keyword) }}" method="post"
                                       class="grid grid-cols-2 gap-2 px-2 py-2 sm:grid-cols-5">
@@ -168,8 +198,47 @@
             </div>
         </article>
 
-        <article class="rounded-xl border border-slate-800 bg-slate-900/70 p-5">
-            <h2 class="text-lg font-semibold">Recent Uptime Checks</h2>
+        <article class="rounded-xl border border-slate-800 bg-slate-900/70 p-5" x-data="{ recording: false }">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Recent Uptime Checks</h2>
+                <button type="button" @click="recording = !recording"
+                        class="rounded-md border border-slate-700 px-3 py-1.5 text-xs hover:border-sky-400 hover:text-sky-300">
+                    <span x-text="recording ? '✕ Cancel' : '+ Record check'"></span>
+                </button>
+            </div>
+
+            <form x-show="recording" x-transition action="{{ route('uptime.store', $website) }}" method="post"
+                  class="mt-4 grid gap-2 rounded-lg border border-slate-800 bg-slate-950/50 p-3">
+                @csrf
+                <label class="text-xs text-slate-400">Checked at
+                    <input type="datetime-local" name="checked_at" value="{{ now()->format('Y-m-d\TH:i') }}" required
+                           class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                </label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="text-xs text-slate-400">Status
+                        <select name="is_up" class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                            <option value="1">Up</option>
+                            <option value="0">Down</option>
+                        </select>
+                    </label>
+                    <label class="text-xs text-slate-400">HTTP status code
+                        <input type="number" name="status_code" min="100" max="599" placeholder="200"
+                               class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                    </label>
+                </div>
+                <label class="text-xs text-slate-400">Response time (ms)
+                    <input type="number" name="response_time_ms" min="1" placeholder="240"
+                           class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                </label>
+                <label class="text-xs text-slate-400">Notes
+                    <input name="notes" placeholder="Optional"
+                           class="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none">
+                </label>
+                <button type="submit" class="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-sky-500">
+                    Save check
+                </button>
+            </form>
+
             <div class="mt-4 space-y-2 text-sm">
                 @forelse ($website->uptimeChecks as $check)
                     <div class="rounded-md border border-slate-800 p-2">
@@ -177,7 +246,7 @@
                         <p class="text-xs text-slate-500">{{ $check->status_code }} · {{ $check->response_time_ms }}ms · {{ $check->checked_at }}</p>
                     </div>
                 @empty
-                    <p class="text-slate-500">No checks yet.</p>
+                    <p class="text-slate-500">No checks yet. Use "+ Record check" above to log your first one.</p>
                 @endforelse
             </div>
         </article>
