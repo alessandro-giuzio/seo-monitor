@@ -94,13 +94,18 @@ The UI backlog is done and the two production 500s are fixed. Ran a broader swee
 ### 4. LOW / long-term — Add regression tests
 - No feature tests exist for any controller. At minimum, worth adding a regression test for the `gsc_metrics` `reorder()` fix (easy to silently reintroduce) and a test asserting `RunScheduledSeoChecks` continues past an unreachable website once #1 is fixed. Broader controller test coverage is a bigger, separate undertaking — flagging it, not proposing to do it all now.
 
-## Verification checklist for next session
-- `npm run dev` running, Herd serving `http://seo-demo.test`.
-- Login: giuzio@icloud.com / password (per `NEXT_STEPS.md`).
-- For #1 and #2: reproduce locally first with a deliberately unreachable URL/website (`php artisan seo:run-scheduled` against a fake `base_url`, or submitting an audit for a non-existent domain) before and after the fix.
-- Remember: any change touching migrations needs the production-DB caution called out earlier in this file — these two fixes do not.
+## Documentation pass + two more gaps found (2026-07-25)
+
+While writing `FUNCTIONALITY.md` (a full app reference — see that file) and rewriting the in-app "How To Use This Page" sidebar text, read every controller end-to-end and found two more real issues:
+
+- **`SeoAlertService::detectTrafficDrops()` had the same GROUP BY bug** as the earlier `/reports`/`/content-decay` fix — missed originally because the audit only grepped `app/Http/Controllers/`, not `app/Services/`. Fixed with the same `->reorder()` pattern (commit `9587519`). This means "Run evaluation" on `/alerts` was likely still 500ing in production until this fix.
+- **Ranking snapshots and uptime checks had zero UI** — `rankings.store` and `uptime.store` routes/controllers worked but nothing ever called them, so the "Latest Position" column and "Recent Uptime Checks" section could never be populated. Added a "Log ranking" toggle per keyword row and a "Record check" toggle on the uptime card in `websites/show.blade.php` (commit `3168bb9`), verified end-to-end.
+
+**Lesson for future audits in this repo:** grep across all of `app/` (controllers, services, models, console commands), not just controllers — the bug classes found this session (unguarded HTTP calls, GROUP BY footguns, orphaned routes) can live anywhere business logic does.
 
 ## Verification checklist for next session
 - `npm run dev` running, Herd serving `http://seo-demo.test`.
 - Login: giuzio@icloud.com / password (per `NEXT_STEPS.md`).
+- For anything HTTP-related: reproduce locally first with a deliberately unreachable URL/website before and after a fix.
 - After each item: visually check the affected page in-browser, and for anything touching flash/session state, do a real form submit (not just a page load) to confirm behavior.
+- Remember: any change touching migrations needs the production-DB caution called out earlier in this file.
