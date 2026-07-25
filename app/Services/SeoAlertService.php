@@ -55,6 +55,7 @@ class SeoAlertService
         $prev28End = $now->copy()->subDays(28)->endOfDay();
 
         $lastPeriod = $website->gscMetrics()
+            ->reorder()
             ->whereBetween('metric_date', [$last28Start->toDateString(), $now->toDateString()])
             ->selectRaw('page_url, SUM(clicks) as clicks')
             ->groupBy('page_url')
@@ -65,6 +66,7 @@ class SeoAlertService
         }
 
         $prevPeriod = $website->gscMetrics()
+            ->reorder()
             ->whereBetween('metric_date', [$prev28Start->toDateString(), $prev28End->toDateString()])
             ->selectRaw('page_url, SUM(clicks) as clicks')
             ->groupBy('page_url')
