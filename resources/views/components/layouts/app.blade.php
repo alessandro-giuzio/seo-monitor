@@ -75,29 +75,105 @@
         @php
             $routeName = request()->route()?->getName();
             $helpByRoute = [
-                'dashboard' => ['Use this page to add websites, run audits, and log keyword/uptime updates quickly.', 'Start by adding a website, then add tracked keywords.', 'Use this daily as your operations inbox.'],
-                'websites.index' => ['Review all websites you track.', 'Open each website for settings and recent monitoring data.'],
-                'websites.show' => ['Update website settings like GSC property, alert email, and crawl frequency.', 'Use this as the profile page for one website.'],
-                'gsc.index' => ['Paste GSC export rows in format: date,query,page_url,clicks,impressions,ctr,avg_position.', 'Import data regularly to power decay and alert modules.'],
-                'domain-overview.index' => ['Log periodic domain metrics snapshots.', 'Use trends to monitor visibility and traffic direction.'],
-                'keyword-research.index' => ['Store and filter keyword ideas.', 'Promote ideas into tracked keywords with Track button.'],
-                'competitors.index' => ['Add competitors and their keyword snapshots.', 'Use Keyword Gap table to prioritize opportunities.'],
-                'backlinks.index' => ['Track backlink quality and toxicity.', 'Filter toxic/nofollow links and audit regularly.'],
-                'technical.index' => ['Run a crawl to check robots, sitemap, indexation, orphan pages, and depth.', 'Crawl data feeds checklist, alerts, and link opportunities.'],
-                'technical.runs.show' => ['Review one crawl run summary and generated internal link opportunities.', 'Use this after each crawl to assign fixes.'],
-                'decay.index' => ['Find pages losing clicks versus prior period.', 'Refresh or relink pages with biggest drops.'],
-                'links.index' => ['Review suggested internal links.', 'Implement high-score links first.'],
-                'alerts.index' => ['Run alert evaluation and resolve handled alerts.', 'Open alerts show current risks.'],
-                'reports.index' => ['Generate weekly snapshot and export CSV for sharing.', 'Use this for client/team reporting.'],
-                'change-log.index' => ['Track what changed (content, metadata, redirects, technical) and when.', 'Use this to correlate SEO changes with ranking/traffic shifts.'],
-                'redirects.index' => ['Maintain redirect mappings and validate response/location behavior.', 'Use Check action before releases to avoid broken redirect rollouts.'],
-                'release-qa.index' => ['Run pre-release SEO QA against crawl/audit/alerts/redirect health.', 'Use pass/warn/fail score as release gate before go-live.'],
-                'release-qa.show' => ['Inspect one release QA run and all detected issues.', 'Fix high severity items before deploying.'],
-                'checklist.index' => ['Follow the 4-block SEO checklist and resolve warn/fail items.', 'Use Generate tasks to convert issues into actionable work.'],
-                'audits.index' => ['Browse all on-page audits.', 'Open specific audits for issue-level detail.'],
-                'audits.show' => ['Review metadata and technical findings for one URL.', 'Use issues list as optimization checklist for the page.'],
+                'dashboard' => [
+                    'Read-only overview — nothing is entered here. KPI tiles and the health grid pull from every other page.',
+                    'New here? Add a website first, then work through Websites → GSC → Technical → Audits in order — most other pages depend on that data existing.',
+                    'The "Open Alerts" tile and uptime % update automatically once you run alert evaluation and log uptime checks elsewhere.',
+                ],
+                'websites.index' => [
+                    'Only Name and Base URL are required to add a site — GSC property, industry, target country, alert email, and crawl frequency are optional but unlock other features.',
+                    'Crawl frequency (hours) controls when the hourly scheduler decides this site is "due" for an automatic Technical crawl.',
+                    'Use the "⋯" menu on a card to rename/change the URL or delete a site without opening it.',
+                ],
+                'websites.show' => [
+                    'This is mission control for one site — settings, latest status snapshots, tracked keywords, and uptime history all live here.',
+                    'Add keywords under "Keywords", then use "Log ranking" on each row to record a real SERP position you observed — this app does not fetch rankings automatically.',
+                    'There is no automatic uptime pinger — use "Record check" to log an up/down observation yourself (or paste results from an external monitor).',
+                ],
+                'gsc.index' => [
+                    'Paste rows from a real Google Search Console export — no live API connection exists, this is manual import only.',
+                    'Two formats auto-detected by column count: 5 columns = date,clicks,impressions,ctr,position (chart export). 7 columns = date,query,page_url,clicks,impressions,ctr,avg_position (page export).',
+                    'This is the single most important data source in the app — it powers Content Decay, the traffic-drop alert type, and part of Reports. Import regularly.',
+                ],
+                'domain-overview.index' => [
+                    'Log domain-level metrics from a third-party tool (Ahrefs, Semrush, etc.) — traffic estimate, organic keywords, referring domains, backlink count, visibility index, average position.',
+                    'Each submission is a dated snapshot; log periodically (e.g. weekly/monthly) to build a trend, not just once.',
+                ],
+                'keyword-research.index' => [
+                    'A separate idea database from your tracked keywords — use it to research before committing to tracking something.',
+                    'Bulk import format: keyword,volume,kd,cpc,intent — one per line.',
+                    '"Track" promotes an idea into a real tracked Keyword on its website. Log its actual ranking position afterward from the website detail page.',
+                ],
+                'competitors.index' => [
+                    'Add a competitor by name/domain, then log their keyword ranking snapshots as you find them (no live rank-tracking API — manual entry).',
+                    'The Keyword Gap table below is fully automatic: it surfaces keywords where a competitor ranks top 30 and you rank worse (or not at all), ranked by opportunity.',
+                ],
+                'backlinks.index' => [
+                    'Log backlinks you already found elsewhere — no live backlink-discovery integration.',
+                    'Flag toxic or nofollow links as you enter them so the filters and stats tiles (total, toxic, nofollow, avg authority) stay useful.',
+                ],
+                'technical.index' => [
+                    '"Run crawl" makes real live HTTP requests to your site — fetches robots.txt and sitemap.xml, then crawls up to N pages (default 30, max 200).',
+                    'Also runs automatically every hour for any site whose crawl frequency says it\'s due — this button is for on-demand runs.',
+                    'Crawl output feeds three other pages: Link Opportunities (auto-generated), the orphan/indexation Alert types, and most of the Checklist and Release QA scores.',
+                    'If a site is unreachable, that run is marked failed with the error recorded — it won\'t block crawling your other sites.',
+                ],
+                'technical.runs.show' => [
+                    'One crawl run in full detail: every page checked, plus the internal link suggestions generated from this run.',
+                    'Orphan pages (zero internal links pointing to them) and non-indexable pages are what drive Alerts and Release QA — start fixes there.',
+                ],
+                'decay.index' => [
+                    'Requires GSC data — empty until you\'ve imported rows on the GSC page.',
+                    'Flags pages where clicks dropped 20%+ comparing the last 28 days to the prior 28, filtering out low-traffic noise (needs 20+ prior clicks to qualify).',
+                    'Prioritize the biggest drops for a content refresh or additional internal links.',
+                ],
+                'links.index' => [
+                    'Fully automatic, read-only output — generated the moment you run a Technical crawl. Nothing to configure here.',
+                    'Suggests linking FROM well-linked, high-content-depth pages TO strong pages that currently get little internal linking.',
+                    'Re-run a Technical crawl to refresh these suggestions.',
+                ],
+                'alerts.index' => [
+                    '"Run evaluation" checks every website for orphan pages, non-indexable pages (both from the latest Technical crawl), and traffic drops of 30%+ (from GSC data).',
+                    'This also runs automatically every hour in the background — the button is only for checking on-demand.',
+                    'Won\'t create a duplicate for the same issue within 24 hours, so it\'s safe to run repeatedly.',
+                ],
+                'reports.index' => [
+                    'A one-page rollup per website: tracked keywords, top-10 count, open alerts, 30-day uptime, latest crawl health, and top content-decay pages.',
+                    '"Export CSV" downloads the same numbers for sharing with a client or team outside the app.',
+                    'Quality depends on the pages behind it — import GSC data and run a crawl first for a meaningful report.',
+                ],
+                'change-log.index' => [
+                    'A manual audit trail — log what changed (area, old/new value, impact level) and when.',
+                    'Nothing else in the app reads this automatically, but it\'s essential later for correlating a ranking or traffic shift with what you actually changed.',
+                ],
+                'redirects.index' => [
+                    'Maintain your redirect map (from-path → destination URL, status code, active flag).',
+                    '"Check" makes a real live request to your site to verify the redirect actually works and points where you expect — run this before releases.',
+                    'Rules currently failing their last check feed directly into the Release QA score.',
+                ],
+                'release-qa.index' => [
+                    'A pre-deploy gate: scores a website against latest crawl health, latest audit score, open alerts, and failing redirect checks.',
+                    'Run this after you\'ve got fresh crawl + audit data — an empty/stale dataset just produces a false "fail" for missing data, not a real signal.',
+                    'Use the pass/warn/fail verdict as an actual release gate, not just a report.',
+                ],
+                'release-qa.show' => [
+                    'Every issue that contributed to this run\'s score, with severity — fix high-severity items before deploying.',
+                ],
+                'checklist.index' => [
+                    'Auto-graded from your latest crawl, latest audit, GSC data, and website settings — each item explains exactly why it passed, warned, or failed.',
+                    '"Generate tasks" converts every warn/fail item into a due-dated task (3 days for fails, 7 for warnings) without creating duplicates.',
+                    'Re-run a crawl or audit and revisit this page — scores update automatically, nothing to regenerate manually.',
+                ],
+                'audits.index' => [
+                    '"Run audit" fetches the URL live by default — or paste raw HTML instead to audit content behind auth or before it\'s published.',
+                    'Checks title/meta description length, H1 count, canonical tag, missing alt text, word count, and internal/external link counts.',
+                    'An unreachable URL returns a clear error instead of crashing — double-check the URL if you see one.',
+                ],
+                'audits.show' => [
+                    'Full breakdown for one audited URL — use the issues list as a literal fix checklist for that page.',
+                ],
             ];
-            $helpItems = $helpByRoute[$routeName] ?? ['Use this page to manage SEO workflows.', 'Keep data updated to improve alerts, reports, and checklist quality.'];
+            $helpItems = $helpByRoute[$routeName] ?? ['Use this page to manage SEO workflows.', 'Keep data updated to improve alerts, reports, and checklist quality.', 'See FUNCTIONALITY.md in the project root for the full app guide.'];
         @endphp
 
         @if (session('status'))
