@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Competitor;
 use App\Models\Website;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -22,7 +22,7 @@ class CompetitorController extends Controller
             $selectedWebsite = Website::query()
                 ->with([
                     'keywords.latestSnapshot',
-                    'competitors.keywordSnapshots' => fn (Builder $query) => $query->latest('checked_at')->limit(300),
+                    'competitors.keywordSnapshots' => fn (HasMany $query) => $query->latest('checked_at')->limit(300),
                 ])
                 ->find($selectedId);
 

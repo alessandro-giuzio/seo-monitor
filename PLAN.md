@@ -109,3 +109,16 @@ While writing `FUNCTIONALITY.md` (a full app reference — see that file) and re
 - For anything HTTP-related: reproduce locally first with a deliberately unreachable URL/website before and after a fix.
 - After each item: visually check the affected page in-browser, and for anything touching flash/session state, do a real form submit (not just a page load) to confirm behavior.
 - Remember: any change touching migrations needs the production-DB caution called out earlier in this file.
+
+## Test coverage added, then a real `/competitors` 500 found and fixed (2026-07-27)
+
+Added the first real feature tests to close the gap flagged above: `database/factories/WebsiteFactory.php` and `GscMetricFactory.php`, plus regression tests for the two bug classes already documented in this file — the GROUP BY/inherited-ORDER BY bug (captures actual executed SQL via `DB::listen()` so it catches the bug on SQLite too, not just Postgres) and the scheduled-crawler-aborts-on-one-failure bug (via `Http::fake()` throwing a `ConnectionException`). Also replaced the stale `ExampleTest` (asserted `/` returns 200; this app is auth-only and redirects guests to login).
+
+While using the app afterward, hit a genuine new production 500 on `/competitors` after adding a competitor:
+
+- `CompetitorController::index()` (`app/Http/Controllers/CompetitorController.php:25`) eager-loads `'competitors.keywordSnapshots'` with a constraint closure type-hinted as `Illuminate\Database\Eloquent\Builder`. Laravel actually passes the relation instance (`HasMany`) to nested eager-load constraint closures, not a `Builder` — so PHP threw a `TypeError` the moment a website had at least one competitor. A website with zero competitors never invoked the closure at all, which is why this was invisible until real data existed (i.e. right after using the "Add Competitor" form for the first time on a given site).
+- Diagnosed via the Coolify terminal since this container has no `storage/logs/laravel.log` on disk (logs go to stdout, captured by Coolify's Logs tab instead) — reproduced directly with `php artisan tinker` calling `CompetitorController@index` to surface the real exception.
+- Fixed by changing the type hint to `Illuminate\Database\Eloquent\Relations\HasMany`. Verified locally end-to-end (create a competitor, load `/competitors`, 200) before and after the fix, and confirmed the exact `TypeError` reproduces locally too once a competitor exists — this bug wasn't Postgres/SQLite-specific, just data-state-specific.
+- Added `database/factories/CompetitorFactory.php` and `tests/Feature/CompetitorsPageRegressionTest.php` covering both the direct page load and the full add-then-view flow.
+
+**Lesson for future audits:** an empty-collection smoke test (load a page before any data exists) is not sufficient coverage for eager-load constraint closures — the closure may only execute once the parent relation actually returns rows. Test list/detail pages with real related records present, not just the empty state.
