@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('seo:run-scheduled')->hourly();
 Schedule::command('seo:evaluate-alerts')->hourly();
+Schedule::command('gsc:sync-scheduled')->dailyAt('03:00');

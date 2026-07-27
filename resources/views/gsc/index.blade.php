@@ -15,6 +15,32 @@
 
     @if ($selectedWebsite)
         <section class="mt-6 rounded-xl border border-slate-800 bg-slate-900/70 p-5">
+            <h2 class="text-lg font-semibold">Connection</h2>
+            @if ($selectedWebsite->gscConnection)
+                <p class="mt-2 text-sm text-emerald-300">Connected</p>
+                <p class="text-xs text-slate-500">
+                    Last synced: {{ $selectedWebsite->gscConnection->last_synced_at?->diffForHumans() ?? 'never' }}
+                </p>
+                <div class="mt-3 flex gap-2">
+                    <form action="{{ route('gsc.sync', $selectedWebsite) }}" method="post">
+                        @csrf
+                        <button class="rounded-md bg-sky-500 px-3 py-1.5 text-sm font-medium text-slate-950 hover:bg-sky-400">Sync now</button>
+                    </form>
+                    <form action="{{ route('gsc.disconnect', $selectedWebsite) }}" method="post" onsubmit="return confirm('Disconnect Google Search Console for this website?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="rounded-md border border-slate-700 px-3 py-1.5 text-sm hover:border-red-400 hover:text-red-300">Disconnect</button>
+                    </form>
+                </div>
+            @else
+                <p class="mt-2 text-sm text-slate-400">Not connected. Connect to automatically sync data instead of pasting CSV rows below.</p>
+                <a href="{{ route('gsc.connect', $selectedWebsite) }}" class="mt-3 inline-block rounded-md bg-sky-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400">
+                    Connect Google Search Console
+                </a>
+            @endif
+        </section>
+
+        <section class="mt-6 rounded-xl border border-slate-800 bg-slate-900/70 p-5">
             <h2 class="text-lg font-semibold">Import Rows</h2>
             <p class="mt-1 text-xs text-slate-500">Format: date,query,page_url,clicks,impressions,ctr,avg_position</p>
             <form action="{{ route('gsc.import') }}" method="post" class="mt-4 grid gap-3">

@@ -13,6 +13,7 @@ use App\Http\Controllers\SeoAuditController;
 use App\Http\Controllers\SeoChangeLogController;
 use App\Http\Controllers\SeoChecklistController;
 use App\Http\Controllers\GscController;
+use App\Http\Controllers\GscOAuthController;
 use App\Http\Controllers\TechnicalSeoController;
 use App\Http\Controllers\AlertController;
 use App\Http\Controllers\RedirectManagerController;
@@ -69,6 +70,10 @@ Route::delete('/competitors/{competitor}', [CompetitorController::class, 'destro
 
 Route::get('/gsc', [GscController::class, 'index'])->name('gsc.index');
 Route::post('/gsc/import', [GscController::class, 'import'])->name('gsc.import');
+Route::get('/websites/{website}/gsc/connect', [GscOAuthController::class, 'connect'])->name('gsc.connect');
+Route::get('/gsc/callback', [GscOAuthController::class, 'callback'])->name('gsc.callback');
+Route::delete('/websites/{website}/gsc/disconnect', [GscOAuthController::class, 'disconnect'])->name('gsc.disconnect');
+Route::post('/websites/{website}/gsc/sync', [GscController::class, 'sync'])->name('gsc.sync');
 
 Route::get('/technical', [TechnicalSeoController::class, 'index'])->name('technical.index');
 Route::post('/technical/run', [TechnicalSeoController::class, 'run'])->name('technical.run');

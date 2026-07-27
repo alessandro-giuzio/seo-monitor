@@ -86,3 +86,14 @@ As of the last update, the only open item is broader automated test coverage (cu
 # In Coolify terminal
 php artisan tinker --execute="App\Models\User::create(['name'=>'Alessandro','email'=>'giuzio@icloud.com','password'=>bcrypt('your-password')])"
 ```
+
+## Google Search Console OAuth setup
+
+`/gsc` can connect directly to a website's Search Console property instead of pasting CSV rows. Requires a one-time Google Cloud setup:
+
+1. Create a project in [Google Cloud Console](https://console.cloud.google.com), enable the **Search Console API**.
+2. Create an **OAuth 2.0 Client ID** (Web application type) under Credentials.
+3. Add an authorized redirect URI: `https://seo.xrun.gdn/gsc/callback` (production) and/or `http://seo-demo.test/gsc/callback` (local).
+4. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env` (and as Coolify secrets in production).
+
+Without these set, the "Connect Google Search Console" button on `/gsc` flashes a friendly error and the manual CSV paste import still works as a fallback. Tokens are stored per-website in `gsc_connections` (access/refresh tokens are encrypted via Laravel's `encrypted` cast). A daily scheduled command (`gsc:sync-scheduled`) pulls fresh data for connected websites; `GscSyncService` handles token refresh automatically.

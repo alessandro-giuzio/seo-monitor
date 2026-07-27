@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GscMetric;
 use App\Models\Website;
+use App\Services\GscSyncService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -18,7 +19,7 @@ class GscController extends Controller
 
         if ($websites->isNotEmpty()) {
             $selectedId = $request->integer('website_id') ?: $websites->first()->id;
-            $selectedWebsite = Website::query()->find($selectedId);
+            $selectedWebsite = Website::query()->with('gscConnection')->find($selectedId);
             if ($selectedWebsite) {
                 $metrics = $selectedWebsite->gscMetrics()->latest('metric_date')->paginate(50)->withQueryString();
             }
@@ -104,5 +105,20 @@ class GscController extends Controller
         return redirect()
             ->route('gsc.index', ['website_id' => $website->id])
             ->with('status', "{$created} GSC row(s) imported.");
+    }
+
+    public function sync(Website $website, GscSyncService $syncService): RedirectResponse
+    {
+        try {
+            $created = $syncService->syncForWebsite($website);
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('gsc.index', ['website_id' => $website->id])
+                ->withErrors(['gsc' => 'Sync failed: '.$e->getMessage()]);
+        }
+
+        return redirect()
+            ->route('gsc.index', ['website_id' => $website->id])
+            ->with('status', "{$created} GSC row(s) synced from Google.");
     }
 }

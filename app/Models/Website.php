@@ -181,4 +181,12 @@ class Website extends Model
     {
         return $this->hasOne(SeoAudit::class)->latestOfMany('audited_at');
     }
+
+    /**
+     * @return HasOne<GscConnection, $this>
+     */
+    public function gscConnection(): HasOne
+    {
+        return $this->hasOne(GscConnection::class);
+    }
 }
