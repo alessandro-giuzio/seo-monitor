@@ -38,6 +38,7 @@
                     ['release-qa.index', 'release-qa.*', 'Release QA'],
                     ['checklist.index', 'checklist.*', 'Checklist'],
                     ['audits.index', 'audits.*', 'Audits'],
+                    ['guide.index', 'guide.*', 'Guide'],
                 ];
             @endphp
             <div class="flex flex-1 flex-wrap items-center justify-start gap-2 pt-1 text-sm lg:justify-end lg:pt-0">
@@ -171,6 +172,10 @@
                 ],
                 'audits.show' => [
                     'Full breakdown for one audited URL — use the issues list as a literal fix checklist for that page.',
+                ],
+                'guide.index' => [
+                    'A plain-language front door to every page in this app — what to set up first, how each page gets its data, and what runs automatically.',
+                    'Click any page card to jump straight there.',
                 ],
             ];
             $helpItems = $helpByRoute[$routeName] ?? ['Use this page to manage SEO workflows.', 'Keep data updated to improve alerts, reports, and checklist quality.', 'See FUNCTIONALITY.md in the project root for the full app guide.'];

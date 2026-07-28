@@ -9,7 +9,8 @@ A complete reference for what this app does, how its 17 modules connect to each 
 This is a **self-hosted SEO operations hub**, not an all-in-one SEO API product. It does two very different things depending on the page:
 
 1. **Live fetching** — a handful of features make real HTTP requests to your website right now: **on-page Audits**, **Technical crawls**, and **Redirect checks**. Point these at a real URL and they'll fetch it live.
-2. **Manual data entry** — everything else (Search Console numbers, domain authority metrics, competitor rankings, backlinks, uptime checks, keyword rank tracking) has **no live third-party API connection**. You paste in numbers you already have (from Google Search Console exports, Ahrefs/Semrush/Moz, or your own monitoring), and the toolkit stores, trends, and cross-references them.
+2. **Google Search Console — live API connection.** Connect a website's GSC property once (OAuth, on the `/gsc` page) and it syncs automatically every day, plus an on-demand "Sync now" button. No more copy-pasting export rows for connected sites (though manual paste still works as a fallback for sites you haven't connected).
+3. **Manual data entry** — everything else (domain authority metrics, competitor rankings, backlinks, uptime checks, keyword rank tracking) has **no live third-party API connection**. You paste in numbers you already have (from Ahrefs/Semrush/Moz, or your own monitoring), and the toolkit stores, trends, and cross-references them.
 
 Almost every page is scoped to **one website at a time** via a website picker at the top. Add your website(s) first — nothing else is useful until at least one exists.
 
@@ -47,11 +48,10 @@ The control panel for one site:
 - **Recent Uptime Checks** — **Record check** logs a manual up/down observation (status code, response time, notes). There's no automatic uptime pinger built in — you (or an external monitor you paste results from) are the source of truth here.
 
 ### GSC (`/gsc`)
-Paste rows exported from Google Search Console. Two formats are auto-detected by column count:
-- **5 columns** (chart export): `date,clicks,impressions,ctr,position`
-- **7 columns** (detailed/page export): `date,query,page_url,clicks,impressions,ctr,avg_position`
+The single most important data source in the app — it powers Content Decay, the traffic-drop alert, and Reports.
 
-CTR can be a plain decimal or a `%` value — both are normalized. This is the single most important manual data-entry step in the app: it powers Content Decay, the traffic-drop alert, and Reports.
+- **Connect Google Search Console** — one-time OAuth connection per website (needs `gsc_property` set on that website first, e.g. `sc-domain:example.com`). Once connected, data syncs automatically once a day, plus a **Sync now** button for on-demand pulls. See `CLAUDE.md`'s "Google Search Console OAuth setup" section for the one-time Google Cloud setup this requires.
+- **Manual paste fallback** — still available for websites you haven't connected, or one-off historical backfills. Two formats are auto-detected by column count: 5 columns (chart export: `date,clicks,impressions,ctr,position`) or 7 columns (detailed export: `date,query,page_url,clicks,impressions,ctr,avg_position`). CTR can be a plain decimal or a `%` value — both are normalized.
 
 ### Domain Overview (`/domain-overview`)
 Log periodic domain-level metrics you get from a third-party tool (estimated traffic, organic keyword count, referring domains, total backlinks, a 0–100 visibility index, average position). Each entry is a dated snapshot; the page plots them as a trend so you can see whether your domain metrics are moving up or down over time.
@@ -102,12 +102,13 @@ Standard account management — update your name/email, change your password, or
 
 ## What runs automatically vs. what you have to trigger
 
-**Automatic (hourly, via the server's cron scheduler):**
-- `seo:run-scheduled` — crawls every website whose `next_crawl_at` is due (based on each site's configured crawl frequency)
-- `seo:evaluate-alerts` — runs the same alert evaluation as the "Run evaluation" button, for every website
+**Automatic (via the server's cron scheduler):**
+- `seo:run-scheduled` (hourly) — crawls every website whose `next_crawl_at` is due (based on each site's configured crawl frequency)
+- `seo:evaluate-alerts` (hourly) — runs the same alert evaluation as the "Run evaluation" button, for every website
+- `gsc:sync-scheduled` (daily, 3am) — pulls fresh Search Console data for every website with an active GSC connection
 
 **Manual only (you have to click a button or submit a form):**
-- Everything else. GSC imports, domain snapshots, competitor tracking, backlinks, redirect checks, audits, release QA runs, checklist task generation, ranking snapshots, and uptime checks all require you to actively enter or trigger them. There is no live GSC API connection, no live backlink-discovery integration, and no automatic uptime pinger — those are all "bring your own data" by design.
+- Everything else. Domain snapshots, competitor tracking, backlinks, redirect checks, audits, release QA runs, checklist task generation, ranking snapshots, and uptime checks all require you to actively enter or trigger them. There is no live backlink-discovery integration and no automatic uptime pinger — those are still "bring your own data" by design. GSC data for websites you haven't OAuth-connected also falls back to manual paste.
 
 ---
 

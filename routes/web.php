@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DomainOverviewController;
 use App\Http\Controllers\KeywordController;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
 
 Route::get('/', DashboardController::class)->name('dashboard');
+Route::get('/guide', [GuideController::class, 'index'])->name('guide.index');
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
