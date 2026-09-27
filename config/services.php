@@ -41,4 +41,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', rtrim((string) env('APP_URL'), '/').'/gsc/callback'),
     ],
 
+    'portal' => [
+        'token' => env('PORTAL_API_TOKEN'),
+    ],
+
 ];
