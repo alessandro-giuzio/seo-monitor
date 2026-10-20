@@ -121,7 +121,12 @@
                                     <span>{{ $keyword->term }}</span>
                                     <span>{{ $keyword->search_engine }}</span>
                                     <span class="capitalize">{{ $keyword->device }}</span>
-                                    <span>{{ $keyword->latestSnapshot?->position ?? '-' }}</span>
+                                    <span>
+                                        {{ $keyword->latestSnapshot?->position ?? '-' }}
+                                        @if ($keyword->latestSnapshot?->source === 'gsc')
+                                            <span class="ml-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] text-emerald-300" title="{{ $keyword->latestSnapshot->notes }}">GSC</span>
+                                        @endif
+                                    </span>
                                     <span class="flex justify-end gap-2 text-xs">
                                         <button type="button" @click="logging = !logging" class="rounded border border-slate-700 px-2 py-1 hover:border-sky-400 hover:text-sky-300">Log ranking</button>
                                         <button type="button" @click="editing = true" class="rounded border border-slate-700 px-2 py-1 hover:border-sky-400 hover:text-sky-300">Edit</button>
@@ -246,7 +251,7 @@
                         <p class="text-xs text-slate-500">{{ $check->status_code }} · {{ $check->response_time_ms }}ms · {{ $check->checked_at }}</p>
                     </div>
                 @empty
-                    <p class="text-slate-500">No checks yet. Use "+ Record check" above to log your first one.</p>
+                    <p class="text-slate-500">No checks yet. They run automatically every 5 minutes; "+ Record check" adds one by hand.</p>
                 @endforelse
             </div>
         </article>

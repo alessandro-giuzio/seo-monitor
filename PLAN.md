@@ -122,3 +122,18 @@ While using the app afterward, hit a genuine new production 500 on `/competitors
 - Added `database/factories/CompetitorFactory.php` and `tests/Feature/CompetitorsPageRegressionTest.php` covering both the direct page load and the full add-then-view flow.
 
 **Lesson for future audits:** an empty-collection smoke test (load a page before any data exists) is not sufficient coverage for eager-load constraint closures — the closure may only execute once the parent relation actually returns rows. Test list/detail pages with real related records present, not just the empty state.
+
+## Automation pass (2026-10-20)
+
+The client portal (apps.xrun.gdn) shows uptime, audit score and keyword rankings, which were all entered by hand. Automated them (see `FUNCTIONALITY.md` → "What runs automatically"):
+
+- `seo:check-uptime` every 5 min (`UptimeMonitorService`).
+- `seo:audit-scheduled` weekly + last day of month — audit logic moved from `SeoAuditController` into `SeoAuditService` so the command and the form share it.
+- `seo:sync-gsc-rankings` daily 03:30 (`GscRankingService`) — new `ranking_snapshots.source` column (`manual`/`gsc`, migration `2026_10_20_120000`, additive only).
+- New alerts emailed to `websites.alert_email` from `SeoAlertService` (`NewSeoAlertsMail`).
+- `seo:check-report-data` on the 28th emails all users what's missing for the monthly report (`ReportReadinessService`).
+- Dashboard uptime tile is now a real 30-day rate (it counted all checks ever, which would have been dominated by automatic checks).
+
+Gotcha found while testing: `GscMetric::metric_date` is stored as `Y-m-d 00:00:00` on SQLite, so `whereBetween('metric_date', [..., 'Y-m-d'])` silently drops the last day locally. `GscRankingService` uses a half-open range instead. `SeoAlertService`/Content Decay use `whereBetween` with today as the upper bound, which only loses "today" (no GSC data exists for today anyway).
+
+Production needs `MAIL_*` set in Coolify for the emails to go out.

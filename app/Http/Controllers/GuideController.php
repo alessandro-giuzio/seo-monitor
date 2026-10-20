@@ -27,7 +27,7 @@ class GuideController extends Controller
             ],
             [
                 'title' => 'Audit your key pages',
-                'desc' => 'On Audits — one URL at a time. Title, meta description, H1, alt text, word count. Feeds the Checklist and Release QA scores.',
+                'desc' => 'On Audits — one URL at a time, with the website selected. Title, meta description, H1, alt text, word count. Feeds the Checklist and Release QA scores. The homepage is also re-audited automatically every week.',
             ],
             [
                 'title' => 'Run alert evaluation',
@@ -36,6 +36,10 @@ class GuideController extends Controller
             [
                 'title' => 'Check Reports, Release QA, Checklist',
                 'desc' => 'All three now have real data to aggregate — this is where the payoff shows up.',
+            ],
+            [
+                'title' => 'Link the client portal',
+                'desc' => "In the portal (apps.xrun.gdn) admin, set the client's seo-monitor website id — the number in this site's /websites/{id} URL. Both apps need the same PORTAL_API_TOKEN. The portal then shows a status card and drafts a monthly report on the 1st from uptime, audit and ranking data here.",
             ],
         ];
 
@@ -48,7 +52,7 @@ class GuideController extends Controller
 
         $modules = [
             ['title' => 'Dashboard', 'route' => 'dashboard', 'chips' => [['Read-only', 'slate']], 'desc' => 'Your daily landing page. KPI tiles and a health card per site, pulled from every other page. Nothing to enter here.'],
-            ['title' => 'Websites', 'route' => 'websites.index', 'chips' => [['You enter it', 'amber']], 'desc' => 'Where everything starts. Add a site\'s name and URL; the rest is optional but unlocks other pages.'],
+            ['title' => 'Websites', 'route' => 'websites.index', 'chips' => [['You enter it', 'amber'], ['Uptime: auto', 'emerald'], ['Rankings: GSC', 'emerald']], 'desc' => 'Where everything starts. Add a site\'s name and URL; the rest is optional but unlocks other pages. Uptime is checked every 5 minutes; keyword rankings come from Search Console when connected, or you log them by hand.'],
             ['title' => 'GSC', 'route' => 'gsc.index', 'chips' => [['Synced automatically', 'emerald'], ['Fallback: paste', 'amber']], 'desc' => 'Connect once via OAuth and it syncs daily, plus an on-demand Sync button. Unconnected sites can still paste CSV export rows.'],
             ['title' => 'Domain Overview', 'route' => 'domain-overview.index', 'chips' => [['You enter it', 'amber']], 'desc' => 'Log periodic domain metrics from a third-party tool — traffic, keyword count, backlinks, visibility. Plotted as a trend over time.'],
             ['title' => 'Keyword Research', 'route' => 'keyword-research.index', 'chips' => [['You enter it', 'amber']], 'desc' => 'A separate idea database from your tracked keywords. Bulk-paste CSV rows; "Track" promotes an idea into a real tracked keyword.'],
@@ -57,13 +61,13 @@ class GuideController extends Controller
             ['title' => 'Technical', 'route' => 'technical.index', 'chips' => [['Live fetch', 'sky']], 'desc' => 'The real crawler — robots.txt, sitemap, up to 200 pages. Finds indexability and orphan-page issues, generates internal-link suggestions.'],
             ['title' => 'Link Opportunities', 'route' => 'links.index', 'chips' => [['Read-only', 'slate']], 'desc' => 'Auto-generated after each Technical crawl. Nothing to configure — re-run a crawl to refresh.'],
             ['title' => 'Content Decay', 'route' => 'decay.index', 'chips' => [['Read-only', 'slate']], 'desc' => 'Pages whose clicks dropped 20%+ over the last 28 days. Needs GSC data connected — empty without it.'],
-            ['title' => 'Alerts', 'route' => 'alerts.index', 'chips' => [['Hourly', 'emerald'], ['+ on-demand', 'sky']], 'desc' => 'Orphan pages, non-indexable pages, and 30%+ traffic drops — detected automatically every hour, or on demand with Run evaluation.'],
+            ['title' => 'Alerts', 'route' => 'alerts.index', 'chips' => [['Hourly', 'emerald'], ['+ on-demand', 'sky']], 'desc' => 'Orphan pages, non-indexable pages, and 30%+ traffic drops — detected automatically every hour, or on demand with Run evaluation. New alerts are emailed to the website\'s alert email.'],
             ['title' => 'Reports', 'route' => 'reports.index', 'chips' => [['Read-only', 'slate']], 'desc' => 'One-page rollup per site. Export CSV for sharing outside the app — handy for client updates.'],
             ['title' => 'Change Log', 'route' => 'change-log.index', 'chips' => [['You enter it', 'amber']], 'desc' => 'A manual record of what you changed and when. Nothing reads it automatically — it\'s there for when a ranking shift shows up later and you need to correlate it.'],
             ['title' => 'Redirects', 'route' => 'redirects.index', 'chips' => [['Rules: you enter', 'amber'], ['Check: live', 'sky']], 'desc' => 'Maintain redirect rules; the Check button live-verifies the real response matches what you configured.'],
             ['title' => 'Release QA', 'route' => 'release-qa.index', 'chips' => [['Read-only', 'slate']], 'desc' => 'A pre-deploy scorecard combining crawl health, audit score, open alerts, and redirect checks. Run before you ship changes.'],
             ['title' => 'Checklist', 'route' => 'checklist.index', 'chips' => [['Auto-graded', 'slate']], 'desc' => 'A 4-section SEO checklist graded from your latest crawl, audit, and GSC data. Generate tasks turns any fail/warn into a to-do with a due date.'],
-            ['title' => 'Audits', 'route' => 'audits.index', 'chips' => [['Live fetch', 'sky']], 'desc' => 'On-page analysis for one URL — title, meta description, H1, alt text, word count, link counts. Score plus an itemized issue list.'],
+            ['title' => 'Audits', 'route' => 'audits.index', 'chips' => [['Live fetch', 'sky'], ['Homepage: weekly', 'emerald']], 'desc' => 'On-page analysis for one URL — title, meta description, H1, alt text, word count, link counts. Score plus an itemized issue list.'],
             ['title' => 'Profile', 'route' => 'profile.edit', 'chips' => [['Account', 'slate']], 'desc' => 'Name, email, password, account deletion. Not SEO-related — just your login.'],
         ];
 
@@ -71,6 +75,10 @@ class GuideController extends Controller
             ['name' => 'Technical crawl', 'desc' => 'Crawls every website whose crawl frequency says it\'s due.', 'cadence' => 'hourly'],
             ['name' => 'Alert evaluation', 'desc' => 'Same check as the "Run evaluation" button, for every website.', 'cadence' => 'hourly'],
             ['name' => 'Search Console sync', 'desc' => 'Pulls fresh data for every connected website.', 'cadence' => 'daily · 3am'],
+            ['name' => 'Rankings from Search Console', 'desc' => 'Logs a 7-day average position for every tracked keyword found in GSC data.', 'cadence' => 'daily · 3:30am'],
+            ['name' => 'Uptime check', 'desc' => 'Requests each website\'s base URL and records up/down and response time.', 'cadence' => 'every 5 min'],
+            ['name' => 'Homepage audit', 'desc' => 'On-page audit of each website\'s base URL, so the portal\'s audit score stays current.', 'cadence' => 'weekly · Mon + last day of month'],
+            ['name' => 'Report data check', 'desc' => 'Emails you which websites are missing data for the monthly portal report.', 'cadence' => 'monthly · 28th'],
         ];
 
         return view('guide.index', compact('steps', 'legend', 'modules', 'automation'));

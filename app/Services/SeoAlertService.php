@@ -2,16 +2,26 @@
 
 namespace App\Services;
 
+use App\Mail\NewSeoAlertsMail;
 use App\Models\SeoAlert;
 use App\Models\Website;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class SeoAlertService
 {
+    /**
+     * Alerts created during the current evaluateForWebsite() call, for the notification email.
+     *
+     * @var list<SeoAlert>
+     */
+    private array $newAlerts = [];
+
     public function evaluateForWebsite(Website $website): int
     {
         $created = 0;
         $now = now();
+        $this->newAlerts = [];
 
         $latestRun = $website->crawlRuns()->latest('started_at')->first();
         if ($latestRun) {
@@ -45,7 +55,26 @@ class SeoAlertService
 
         $created += $this->detectTrafficDrops($website, $now);
 
+        $this->notify($website);
+
         return $created;
+    }
+
+    /**
+     * Emails the website's alert address about the alerts just created. A mail failure is
+     * reported but never stops the evaluation (the alerts are already stored).
+     */
+    private function notify(Website $website): void
+    {
+        if ($this->newAlerts === [] || blank($website->alert_email)) {
+            return;
+        }
+
+        try {
+            Mail::to($website->alert_email)->send(new NewSeoAlertsMail($website, $this->newAlerts));
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     private function detectTrafficDrops(Website $website, Carbon $now): int
@@ -123,7 +152,7 @@ class SeoAlertService
             return 0;
         }
 
-        SeoAlert::create([
+        $this->newAlerts[] = SeoAlert::create([
             'website_id' => $website->id,
             'type' => $type,
             'severity' => $severity,

@@ -51,8 +51,9 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        $uptimeChecksCount = UptimeCheck::count();
-        $uptimeHealthyCount = UptimeCheck::where('is_up', true)->count();
+        $uptimeWindow = fn () => UptimeCheck::query()->where('checked_at', '>=', now()->subDays(30));
+        $uptimeChecksCount = $uptimeWindow()->count();
+        $uptimeHealthyCount = $uptimeWindow()->where('is_up', true)->count();
 
         return view('dashboard', [
             'websites' => $websites,
