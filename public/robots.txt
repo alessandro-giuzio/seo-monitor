@@ -1,2 +1,5 @@
+# Private, login-only tool: keep it out of search results.
+# /privacy stays crawlable (linked from the Google OAuth consent screen).
 User-agent: *
-Disallow:
+Allow: /privacy
+Disallow: /

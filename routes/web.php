@@ -26,6 +26,9 @@ use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 
+// Public: linked from the Google OAuth consent screen, so it must load without logging in.
+Route::view('/privacy', 'privacy')->name('privacy');
+
 Route::middleware('auth')->group(function () {
 
 Route::get('/', DashboardController::class)->name('dashboard');

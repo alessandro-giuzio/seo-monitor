@@ -24,6 +24,10 @@
                 {{ $slot }}
             </div>
 
+            <footer class="mt-6 text-xs text-slate-500">
+                <a href="{{ route('privacy') }}" class="hover:text-sky-300">Privacy</a>
+            </footer>
+
         </div>
     </body>
 </html>
