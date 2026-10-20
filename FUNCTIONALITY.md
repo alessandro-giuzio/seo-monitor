@@ -1,5 +1,7 @@
 # SEO Toolkit — Functionality Guide
 
+For step-by-step routines (onboarding a client, weekly checks, month end), see [HOW_TO_USE.md](HOW_TO_USE.md). This file is the reference.
+
 What this app does, how its modules depend on each other, what it shares with the client portal, and what you have to feed it by hand. Written for the operator running SEO monitoring for one or more client websites.
 
 Last reviewed: 2026-10-20 (portal API, plus the automation pass: uptime monitor, scheduled audits, GSC rankings, alert emails, report data check).
