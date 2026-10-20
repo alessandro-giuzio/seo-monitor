@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PortalReportController;
 use App\Http\Controllers\Api\PortalStatusController;
 use App\Http\Middleware\EnsurePortalToken;
 use Illuminate\Support\Facades\Route;
@@ -8,4 +9,8 @@ use Illuminate\Support\Facades\Route;
 // always runs before the website lookup and an unauthenticated caller only ever sees 401.
 Route::middleware(EnsurePortalToken::class)
     ->get('/portal/websites/{website}/status', PortalStatusController::class)
+    ->whereNumber('website');
+
+Route::middleware(EnsurePortalToken::class)
+    ->get('/portal/websites/{website}/report', PortalReportController::class)
     ->whereNumber('website');
