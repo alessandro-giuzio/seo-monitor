@@ -12,6 +12,7 @@ class RankingSnapshot extends Model
 
     protected $fillable = [
         'keyword_id',
+        'source',
         'checked_at',
         'position',
         'search_volume',
